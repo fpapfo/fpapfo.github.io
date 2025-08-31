@@ -2,9 +2,8 @@ theme: minima
 
 title: "Donna Graham FP&A"
 
-author:
-  name: Donna Graham
-  email: hello@dgrhm.com
+name: Donna Graham
+email: hello@dgrhm.com
 
 header_pages:
   - about.md

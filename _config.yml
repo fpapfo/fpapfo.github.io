@@ -1,16 +1,15 @@
 theme: minima
 
-title: Donna Graham FP&A
-author:
+ title: Donna Graham FP&A
+ author:
    name: Donna Graham
    email: hello@dgrhm.com
-description: "Website under construction - content coming soon"
 
-header_pages:
+   header_pages:
      - about.md
 
-minima:
-social_links:
+ minima:
+   social_links:
      - title: Linkedin
        icon: linkedin
        url: "https://www.linkedin.com/in/donna-graham-685521179"

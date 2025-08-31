@@ -1,8 +1,11 @@
-theme: minima
+remote_theme: jekyll/minima@v2.5.2   # or omit @… to track latest, but pinning is safer
+plugins:
+  - jekyll-remote-theme
 
 title: "Donna Graham FP&A"
-name: "Donna Graham"
-email: hello@dgrhm.com
+author:
+  name: "Donna Graham"
+  email: hello@dgrhm.com
 
 header_pages:
   - about.md
@@ -12,4 +15,3 @@ social_links:
     - title: "LinkedIn"
       icon: linkedin
       url: "https://www.linkedin.com/in/donna-graham-685521179"
-linkedin_username: donna-graham-685521179

@@ -10,7 +10,7 @@ header_pages:
   - about.md
 
 minima:
-  social_links:
+social_links:
     - title: "LinkedIn"
       icon: linkedin
       url: "https://www.linkedin.com/in/donna-graham-685521179"

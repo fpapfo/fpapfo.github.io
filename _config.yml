@@ -1,5 +1,6 @@
 # Site-wide settings
-# theme: minima
+# ------------------
+#
 # title: Donna Graham FP&A
 #
 # author:
@@ -16,7 +17,9 @@
  
 
 
-
+# Build settings
+# theme: minima
+#
 # minima:
 #  nav_pages:
 #     - about.md

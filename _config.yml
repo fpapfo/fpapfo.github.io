@@ -1,15 +1,1 @@
-title: "Donna Graham FP&A"
-description: "Finance Analysis, SQL, Power BI, Excel automation"
 theme: minima
-
-# Show pages in the header (add these files in the repo root if/when you want them)
-# header_pages:
-#   - about.md
-#   - portfolio.md
-#   - contact.md
-
-# Optional: Minima’s built-in social links (footer)
-minima:
-  social_links:
-    - title: LinkedIn
-      url: https://www.linkedin.com/in/donna-graham-685521179

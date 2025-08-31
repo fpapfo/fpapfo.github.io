@@ -13,4 +13,6 @@ social_links:
     - title: "LinkedIn"
       icon: square-linkedin
       url: "https://www.linkedin.com/in/donna-graham-685521179"
-      email: hello@dgrhm.com
+    - title: "Email"
+      icon: envelope
+      url: hello@dgrhm.com

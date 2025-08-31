@@ -10,6 +10,7 @@ header_pages:
 
 minima:
 social_links:
-    - platform: "LinkedIn"
+    - title: "LinkedIn"
+      icon: square-linkedin
       url: "https://www.linkedin.com/in/donna-graham-685521179"
-email: hello@dgrhm.com
+      email: hello@dgrhm.com

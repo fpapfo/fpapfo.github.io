@@ -9,10 +9,7 @@ header_pages:
   - about.md
 
 minima:
-social_links:
-    - title: "LinkedIn"
+  social_links:
+    - platform: "LinkedIn"
       icon: square-linkedin
-      url: "https://www.linkedin.com/in/donna-graham-685521179"
-    - title: "Email"
-      icon: envelope
-      url: hello@dgrhm.com
+      url: [Donna Graham] (https://www.linkedin.com/in/donna-graham-685521179)

@@ -4,15 +4,12 @@ plugins:
 
 title: "Donna Graham FP&A"
 
-author:
-  name: Donna Graham
-  email: hello@dgrhm.com
+email: hello@dgrhm.com
 
 header_pages:
   - about.md
 
 minima:
   social_links:
-    - title: "LinkedIn"
-      icon: linkedin
-      url: "https://www.linkedin.com/in/donna-graham-685521179"
+    - platform: "LinkedIn"
+      user_url: "https://www.linkedin.com/in/donna-graham-685521179"

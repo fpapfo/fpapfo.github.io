@@ -11,4 +11,5 @@ header_pages:
 minima:
   social_links:
     - title: "LinkedIn"
-      url: [Donna Graham] (https://www.linkedin.com/in/donna-graham-685521179)
+      icon: linkedin
+      url: "https://www.linkedin.com/in/donna-graham-685521179

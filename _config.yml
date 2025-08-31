@@ -1,4 +1,4 @@
-remote_theme: jekyll/minima@v2.5.2   # or omit @… to track latest, but pinning is safer
+remote_theme: jekyll/minima@v2.5.1   # or omit @… to track latest, but pinning is safer
 plugins:
   - jekyll-remote-theme
 

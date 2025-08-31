@@ -3,15 +3,14 @@ plugins:
   - jekyll-remote-theme
 
 title: "Donna Graham FP&A"
-author:
-  name: "Donna Graham"
-  email: hello@dgrhm.com
+
 
 header_pages:
   - about.md
 
 minima:
 social_links:
-    - title: "LinkedIn"
+    - platform: "LinkedIn"
       icon: linkedin
       url: "https://www.linkedin.com/in/donna-graham-685521179"
+email: hello@dgrhm.com

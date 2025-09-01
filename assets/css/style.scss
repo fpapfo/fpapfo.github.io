@@ -1,0 +1,13 @@
+---
+---
+@import "minima";
+
+.social-link .social-icon {
+  width: 18px; height: 18px;
+  vertical-align: text-bottom;
+  margin-right: 6px;
+  fill: currentColor; /* icon inherits link colour */
+}
+
+/* Optional: brand blue for that footer link only */
+.site-footer a[href="/linkedin"] { color: #0A66C2; }

@@ -6,4 +6,4 @@ It will showcase projects such as:
 - Python automation scripts
 - Data analysis with SQL/Excel
 
-➡️ The live site is available at: [https://fpapfo.github.io](https://portfolio.github.io)
+➡️ The live site is available at: [https://fpapfo.github.io](https://fpapfo.github.io)

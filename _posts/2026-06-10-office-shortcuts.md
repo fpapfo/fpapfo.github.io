@@ -5,7 +5,7 @@ There is a five-minute setup I do on new computers before I write a single line 
 Microsoft Office syncs AutoCorrect entries across the entire suite: Excel, Word, PowerPoint, Outlook, OneNote. Set this up once, and your shortcuts follow you everywhere.
 
 
-## Setup
+### Setup
 
 Go to **File > Options > Proofing > AutoCorrect Options** in any Office application. From there, you can add custom replace-with pairs: type a trigger, and Office swaps it for whatever character or symbol you have defined.
 
@@ -38,7 +38,7 @@ I use a full stop/dot prefix (`.`) to avoid accidental triggers mid-word. Here i
 I include both long and short versions deliberately. There are days when `.t` comes naturally. There are days when I type `.t` looking for ∴ and have to remind myself that is `.f`. Having both means I get there, either way.
 
 
-## Why this matters for FP&A commentary
+### Why this matters for FP&A commentary
 
 Good financial commentary is precise and scannable. A CFO reading a variance pack before a board meeting is not reading every word, they are scanning for signals. Symbols carry meaning instantly in a way that words sometimes do not.
 
@@ -59,7 +59,7 @@ Revenue ahead of forecast ∴ EBITDA ahead of budget despite cost pressures
 The symbols are not decoration. Used consistently, they become a visual language your stakeholders learn to read quickly. The `.cont ↳` is particularly underused. It is useful for showing that a sub-point flows from the one above without repeating context, which keeps commentary tight and avoids the padding that dilutes the message.
 
 
-## A note on the setup process
+### A note on the setup process
 
 You will need to add these one at a time in the AutoCorrect dialog. Unfortunately there is no bulk import option. I would suggest doing it in Word or Outlook where you can test immediately by typing in a document. The chnages will sync to the rest of the suite automatically over a few minutes.
 

@@ -1,8 +1,15 @@
-# Small setup, big impact: Office shortcuts for Financial commentary
+# Small setup, big impact
 
-There is a five-minute setup I do on new computers before I write a single line of financial commentary or build a single model. It costs nothing, requires no IT tickets, and I'm surprised by how few people in finance know it exists.
+There is a five-minute setup I do on new computers before I write a single line of financial commentary or build a single model. It costs nothing and doesn't require an IT ticket and I'm surprised by how few people in finance know it exists.
 
-Microsoft Office syncs AutoCorrect entries across the entire suite: Excel, Word, PowerPoint, Outlook, OneNote. Set this up once, and your shortcuts follow you everywhere.
+Microsoft Office syncs AutoCorrect entries across the entire suite: Excel, Word, PowerPoint, Outlook, OneNote. Set it up once and your shortcuts follow you everywhere, giving you instant access to characters you can't type directly from the keyboard:
+
+```
+▲ Overtime costs £23k above budget
+   ↳ Vacancy unfilled since Q1
+   ↳ Agency cover at premium rates offsetting £43k headcount saving
+   ∴ Underlying favourable variance of £66k masked by agency cost. Likely to persist until role is filled.
+```
 
 
 ### Setup

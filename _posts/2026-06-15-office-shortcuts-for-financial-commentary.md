@@ -1,4 +1,6 @@
-# Small setup, big impact
+3 Minute Read
+
+### Small setup, big impact
 
 There is a five-minute setup I do on new computers before I write a single line of financial commentary or build a single model. It costs nothing and doesn't require an IT ticket and I'm surprised by how few people in finance know it exists.
 
@@ -68,7 +70,7 @@ The symbols are not decoration. Used consistently, they become a visual language
 
 ### A note on the setup process
 
-You will need to add these one at a time in the AutoCorrect dialog. Unfortunately there is no bulk import option. I would suggest doing it in Word or Outlook where you can test immediately by typing in a document. The chnages will sync to the rest of the suite automatically over a few minutes.
+You will need to add these one at a time in the AutoCorrect dialog as unfortunately there is no bulk import option. I'd suggest doing it in Word or Outlook where you can test immediately by typing in a document. The changes will sync to the rest of the suite automatically over a few minutes.
 
 One caveat: AutoCorrect entries are stored locally, so moving to a new machine means starting again. I keep a reference copy in my notes for exactly this reason. The setup takes five minutes, but only if you can remember what you had.
 

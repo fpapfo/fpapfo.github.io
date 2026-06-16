@@ -54,7 +54,6 @@ This works in SUMIFS, COUNTIFS, named ranges, array formulas and conditional for
 Sadly it does **not** work in the "Applies to" box in conditional formatting, that field requires a static range reference. (The Excel team may consider this working as intended, but dynamic "Applies to" ranges would be a very welcome addition!)
 
 
-
 ### The "calculate to here" use case
 
 This technique also solves a problem specific to financial models: intentional calculation boundaries.
@@ -62,6 +61,8 @@ This technique also solves a problem specific to financial models: intentional c
 In a financial model it is common to have a dataset where some rows should be included in calculations and some should not: a section below a defined line that exists in the model but should never be scooped up into a SUMIF or a total. With a fixed range like `$A$5:$A$150` this boundary is hidden inside the formula. If someone adds a row at position 152 thinking it is outside the range, there is nothing to tell them they are wrong. The model returns a subtly incorrect answer and the error may not surface until it matters.
 
 The dynamic range approach handles this differently. I add a deliberately blank row at the point where calculations should stop, ensuring the lookup column in that row is empty. The LOOKUP formula sees no value there, treats it as the end of the data, and `Model_MaxRow` stops at the row above. Everything below the blank row is automatically excluded from all formulas using the dynamic range pattern, with no fixed range to maintain and no silent boundary to accidentally breach.
+
+![Spreadsheet showing a boundary row preventing data below from being included in model calculations](../assets/images/CalculateToHere.jpg)
 
 The blank row becomes the explicit, visible boundary. The intention is built into the model structure rather than hidden in a formula reference.
 

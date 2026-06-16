@@ -62,7 +62,7 @@ In a financial model it is common to have a dataset where some rows should be in
 
 The dynamic range approach handles this differently. I add a deliberately blank row at the point where calculations should stop, ensuring the lookup column in that row is empty. The LOOKUP formula sees no value there, treats it as the end of the data, and `Model_MaxRow` stops at the row above. Everything below the blank row is automatically excluded from all formulas using the dynamic range pattern, with no fixed range to maintain and no silent boundary to accidentally breach.
 
-![Spreadsheet showing a boundary row preventing data below from being included in model calculations](../assets/images/CalculateToHere.jpg)
+![Spreadsheet showing a boundary row preventing data below from being included in model calculations](/assets/images/CalculateToHere.jpg)
 
 The blank row becomes the explicit, visible boundary. The intention is built into the model structure rather than hidden in a formula reference.
 

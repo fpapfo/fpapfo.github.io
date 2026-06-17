@@ -2,11 +2,14 @@
 title: "The #SPILL! error you didn't see"
 ---
 
+3 Minute Read
+
+
 # One formula that catches silent model errors before they matter
 
 There is a category of Excel error that is particularly dangerous in financial models: the kind that doesn't look like an error at all.
 
-A blocked spill range is exactly that. If a dynamic array formula can't spill because another value is sitting in its path, Excel returns a `#SPILL!` error in the formula cell itself. That part is visible. What is less obvious is that any formula elsewhere in your model that references the spill range will simply return zero or blank, with no error of its own to flag that something is wrong. Your totals update, your reports populate and everything looks fine. It's really not fine.
+A blocked spill range is exactly that. If a dynamic array formula can't spill because another value is sitting in its path, Excel returns a `#SPILL!` error in the formula cell itself. That part is visible. What's less obvious is that any formula elsewhere in your model that references the spill range will simply return zero or blank, with no error of its own to flag that something is wrong. Totals update, reports populate and everything looks fine. But it's really not fine.
 
 I now add a check for this on the QC tab of every model that uses dynamic arrays.
 

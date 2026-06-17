@@ -1,3 +1,11 @@
+---
+title: "Dynamic ranges in financial models"
+excerpt: "How to build formula ranges that automatically expand with your dataset, without whole-column references, tables or the resource overhead that comes with them."
+---
+
+3 Minute Read
+
+
 # Set it once, forget it forever
 
 There is a small piece of setup I include whenever I have a formula-heavy sheet referencing a dataset on another sheet that will grow over time. It takes about two minutes, lives quietly on the Assumptions or QC tab and means I never have to update a formula range when my dataset grows. I have refined this over time rather than always done it from the start but having used it consistently on recent models I would not go back to using fixed ranges in my formulas.

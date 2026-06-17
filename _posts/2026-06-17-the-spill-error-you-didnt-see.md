@@ -61,7 +61,7 @@ The last one is worth highlighting. In a complex model with multiple dynamic arr
 
 ### A note on the previous post
 
-If you are using the dynamic range control technique [from the previous post](/2026/06/16/dynamic-ranges-in-financial-models.html/) alongside spill ranges, the two work well together. The `Model_LastRow` named range keeps the spill area bounded, which reduces the risk of a spill range expanding unexpectedly into another part of the model. The QC check is the safety net for when it happens anyway.
+If you are using the dynamic range control technique [from the previous post](/2026/06/16/dynamic-ranges-in-financial-models.html) alongside spill ranges, the two work well together. The `Model_LastRow` named range keeps the spill area bounded, which reduces the risk of a spill range expanding unexpectedly into another part of the model. The QC check is the safety net for when it happens anyway.
 
 ### Further reading: ERROR.TYPE reference
 If you'd like to extend this approach to catch other error types on your QC tab, here is the full list of what ERROR.TYPE returns:

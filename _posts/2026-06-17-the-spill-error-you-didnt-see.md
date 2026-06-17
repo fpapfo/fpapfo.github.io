@@ -82,4 +82,6 @@ If you'd like to extend this approach to catch other error types on your QC tab,
 | `#CALC!` | 12 |
 | No error in cell | `#N/A` |
 
+Tip: '#N/A' has a useful property beyond error handling! Most Excel charts won't plot a data point if the cell returns '#N/A'. This makes 'NA()' or 'IFERROR(formula, NA())' a handy technique for dynamic charts where you want missing or incomplete data to simply not appear. For example, a line chart where an actuals line transitions to a forecast dotted line rather than plotting zeros which can distort the chart scale.
+
 *The formula takes thirty seconds to add per spill range. The alternative is finding out a range was blocked three weeks later when you're about to present your figures*

@@ -1,5 +1,6 @@
 ---
 title: "The #SPILL! error you didn't see"
+excerpt: "A single formula on your QC tab that catches blocked spill ranges before they cause silent errors downstream."
 ---
 
 3 Minute Read

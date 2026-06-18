@@ -142,13 +142,13 @@ End Sub
 
 Once the macro has run, set you print layout and save the sheet as a PDF (**File > Save As > PDF**). This preserves the colour swatches visually but also keeps the hex codes and RGB values as selectable, copyable text. You can have the PDF open alongside your workbook and copy values directly rather than retyping them.
 
-The macro, PDF and XLSX version are both available to download below.
+The macro, PDF and XLSX version are both available to download:
 
 [Download the macro as TXT file](/assets/downloads/Mod_MapColorIndex.txt)
 
-[Download as PDF](/assets/downloads/ColorIndex-Reference.pdf)
+[Download as PDF](/assets/downloads/Excel56ColorIndex.pdf)
 
-[Download as Excel](/assets/downloads/ColorIndex-Reference.xlsx)
+[Download as Excel](/assets/downloads/Excel56ColorIndex.xlsx)
 
 
 ### A note on when to use ColorIndex

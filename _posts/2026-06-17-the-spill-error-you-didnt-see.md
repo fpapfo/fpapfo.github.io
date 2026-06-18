@@ -29,7 +29,7 @@ I now add a check for this on the QC tab of every model that uses dynamic arrays
 
 Replace `SheetName!A1` with the first cell of the spill range you want to check.
 
-How it works: Excel's 'ERROR.TYPE' function returns a number identifying the type of error in a cell. A blocked spill range produces a '#SPILL!' error, which has error type 9. If the cell contains no error at all, 'ERROR.TYPE' has nothing to evaluate and returns '#N/A'. The formula uses this behaviour: 'IF(ERROR.TYPE(...)=9)' to catch the blocked spill specifically, and the outer 'IFERROR' catches the '#N/A' that appears when everything is working correctly, converting it to "Spill Range OK". The result is a clean two-state output: either the range is blocked, or it is not.
+How it works: Excel's `ERROR.TYPE` function returns a number identifying the type of error in a cell. A blocked spill range produces a `#SPILL!` error, which has error type 9. If the cell contains no error at all, `ERROR.TYPE` has nothing to evaluate and returns `#N/A`. The formula uses this behaviour: `IF(ERROR.TYPE(...)=9)` to catch the blocked spill specifically, and the outer `IFERROR` catches the `#N/A` that appears when everything is working correctly, converting it to "Spill Range OK". The result is a clean two-state output: either the range is blocked, or it is not.
 
 
 

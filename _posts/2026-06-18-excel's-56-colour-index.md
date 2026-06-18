@@ -8,7 +8,7 @@ excerpt: "A VBA macro that generates Excel's complete 56-colour index reference 
 
 # Generate your own reference in two seconds
 
-If you've spent any time writing VBA in Excel you will have encountered ColorIndex. It is Excel's legacy colour system: 56 colours, each assigned a number, and it appears everywhere in older macros and in certain formatting operations where the newer RGB or hex approaches are not available or simply not necessary.
+If you've spent any time writing VBA in Excel or you want to add colour to conditional formatting or custom formats, you will have encountered ColorIndex. It is Excel's legacy colour system: 56 colours, each assigned a number, and it appears everywhere in older macros and in certain formatting operations where the newer RGB or hex approaches are not available or simply not necessary.
 
 The problem is that nobody remembers which number maps to which colour. There are reference sheets online, but they are scattered, some are outdated and most are low quality screenshots of uncertain origin and frankly I would rather generate my own directly from Excel.
 
@@ -155,6 +155,7 @@ ColorIndex is the legacy system and has limitations. It only covers 56 colours a
 That said, ColorIndex still has its uses (eg. in adding colour to custom formats). It is slightly faster to apply in loops over large ranges and some older shared macros use it throughout. Knowing what each index actually looks like is useful whether you are writing new code or maintaining something that was written years ago.
 
 ### On Office Scripts
+
 This macro is written in VBA which works in any version of Excel that allows macros to be run. The same functionality can be achieved with an Office Script, but that requires a Microsoft 365 subscription and OneDrive, so VBA remains the more portable option for most use cases.
 
 

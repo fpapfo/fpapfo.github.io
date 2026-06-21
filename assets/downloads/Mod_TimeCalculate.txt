@@ -1,0 +1,30 @@
+'==================================================================================================
+' RECALCULATION TIMER MACROS
+' Times a full recalculation of all open workbooks.
+' For accurate results: close all other workbooks before running.
+'==================================================================================================
+
+Sub TimeCalculateFullRebuild()
+' CalculateFullRebuild is the VBA version of CTRL + Alt + SHIFT + F9 full workbook recalculation.
+' Donna Graham 2026
+    Dim startTime As Double
+    
+    startTime = Timer
+    Application.CalculateFullRebuild
+    
+    MsgBox "Full Rebuild recalc (Ctrl+Alt+Shift+F9) took " & Format(Timer - startTime, "0.00") & " seconds", _
+           vbInformation, "Recalculation Timer"
+End Sub
+
+
+Sub TimeCalculateFull()
+' CalculateFullRebuild is the VBA version of CTRL + Alt + SHIFT + F9 full workbook recalculation.
+' Donna Graham 2026
+    Dim startTime As Double
+    
+    startTime = Timer
+    Application.CalculateFull
+    
+    MsgBox "Full recalc (Ctrl+Alt+F9) took " & Format(Timer - startTime, "0.00") & " seconds", _
+           vbInformation, "Recalculation Timer"
+End Sub

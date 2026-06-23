@@ -6,10 +6,11 @@
   width: 18px; height: 18px;
   vertical-align: text-bottom;
   margin-right: 1px; /*changed from 6px */
-  fill: currentColor; /* icon inherits link colour */
+  fill: currentColor; /* icon inherits link color */
 }
 
-.img {
+/* added 23-Jun-26 to round image borders */
+img {
   border-radius: 8px;
 }
 

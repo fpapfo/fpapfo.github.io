@@ -84,8 +84,11 @@ In the QC tab of any model I am actively working on, I add a model calculation b
 | CalculateFull | 1.24s | Baseline v1.0, June 2026 |
 | CalculateFullRebuild | 2.87s | Baseline v1.0, June 2026 |
 
-![QAM with clock icons for Timer macros](/assets/images/BaselineDev.png)
-![QAM with clock icons for Timer macros](/assets/images/BaselineLive.png)
+QC Example when model is in development:
+![QC example when in development](/assets/images/BaselineDev.png)
+
+QC Example when model is live:
+![QC example when model is live](/assets/images/BaselineLive.png)
 
 If the model starts feeling slow during either development or when it's live, I run the timers again and compare against the baseline. A significant increase tells me something has changed. This is usually a formula or conditional formatting that is evaluating more than it needs to, a range reference that has expanded unexpectedly or a data table that has grown.
 

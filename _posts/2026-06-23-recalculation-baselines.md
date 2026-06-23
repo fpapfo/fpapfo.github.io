@@ -91,7 +91,7 @@ If the model starts feeling slow during either development or when it's live, I 
 
 Without the baseline, "it feels slower" is just a feeling. With it, "it is now taking 4.2 seconds where it used to take 1.2 seconds" is something you can investigate.
 
-[Download Calculation Recommendations image to add to your model](/assets/downloads/CalculationRef.png)
+[Download Calculation Recommendations image to add to your model](/assets/downloads/images/CalculationRef.png)
 
 
 ### Adding to the Quick Access Toolbar

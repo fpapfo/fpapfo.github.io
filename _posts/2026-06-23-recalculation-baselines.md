@@ -3,6 +3,8 @@ title: "How long does your model actually take to recalculate?"
 excerpt: "Two macros that time your Excel recalculation and a QC baseline approach that tells you when your model has started to slow down."
 ---
 
+3 Minute Read
+
 Financial models get slower over time. More data, more formulas, more complexity. At some point what used to feel instant starts to feel sluggish. The problem is that "feels sluggish" is not a measurement and you can't improve what you don't measure.
 
 These two macros time your model's recalculation and give you a number in seconds. That number becomes your baseline, and when the model starts feeling slow you run them again to find out whether your instinct is right.

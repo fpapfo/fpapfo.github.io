@@ -19,9 +19,9 @@ Both macros trigger an application-level recalculation. That means every open Ex
 
 Excel has multiple recalculation modes:
 
-**Calculate** (\`F9\`) - Recalculates cells flagged as changed (dirty), plus their dependents using the existing calculation chain as well as volatile functions \`Now()\`, \`Rand()\`, \`Offset\`, \`Today()\` etc.
+**Calculate** (`F9`) - Recalculates cells flagged as changed (dirty), plus their dependents using the existing calculation chain as well as volatile functions `Now()`, `Rand()`, `Offset`, `Today()` etc.
 
-**CalculateSheet** (\`Shift+F9\`) - As above, but current sheet only.
+**CalculateSheet** (`Shift+F9`) - As above, but current sheet only.
 
 **CalculateFull** (`Ctrl+Alt+F9`) – forces all cells to recalculate regardless of whether Excel has flagged them as dirty, cross-sheet dependencies and recalculates already mapped data tables.
 
@@ -32,8 +32,8 @@ Excel has multiple recalculation modes:
 
 For the purposes of a calculation baseline, the first two modes are not overly useful as they only recalculate part of the model. 
 
-For most purposes \`CalculateFull\` is sufficient as it recalculates everything including data tables and volatile functions, making it the standard baseline measure. 
-\`CalculateFullRebuild\` is slower, but gives you a more reliable picture.
+For most purposes `CalculateFull` is sufficient as it recalculates everything including data tables and volatile functions, making it the standard baseline measure. 
+`CalculateFullRebuild` is slower, but gives you a more reliable picture.
 
 
 Paste these into a module in a macro-enabled workbook. I keep mine in a personal macro workbook so they are available to run in any file and add them to either the Quick Access Toolbar with a clock icon for easy access or a dedicated 'Macros' tab in my ribbon. 

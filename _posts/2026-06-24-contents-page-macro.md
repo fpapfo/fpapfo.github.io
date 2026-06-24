@@ -197,13 +197,13 @@ End Function
 
 The three columns are a starting point. I always add at least one more manually depending on what the workbook is for. On a simple model that might be a brief note of what each tab contains. On a shared workbook it might note who is responsible for completing each section or where the inputs come from. On a more complex model I have used it as a completion checklist so it is obvious at a glance which sections are done. The macro gives you the structure; you decide what additional context is useful.
 
-The colour bar defaults to a bright blue. Two RGB values in the code control the appearance – the header bar colour and the "Contents" font colour. Update those to match your organisation's colours and it looks like it belongs rather than like something pasted in from outside.
+The colour bar defaults to a bright blue. Two RGB values in the code control the appearance, the header bar colour and the "Contents" font colour. Update those to match your organisation's colours and it looks like it belongs rather than like something pasted in from outside.
 
 
 
 ### A note on VeryHidden tabs
 
-A tab set to VeryHidden cannot be unhidden through the normal right-click menu – it can only be set and unset via VBA, which means it only exists in macro-enabled workbooks (.xlsm). If you run this macro and see VeryHidden in the visibility column, you now know two things: that tab is deliberately obscured from normal users, and the workbook has VBA capability.
+A tab set to VeryHidden cannot be unhidden through the normal right-click menu, it can only be set and unset via VBA, which means it only exists in macro-enabled workbooks (.xlsm). If you run this macro and see VeryHidden in the visibility column, you now know two things: that tab is deliberately obscured from normal users, and the workbook has VBA capability.
 
 
 

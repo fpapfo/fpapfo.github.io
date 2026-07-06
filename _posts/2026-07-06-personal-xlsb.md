@@ -51,7 +51,7 @@ This is the part most people skip and eventually regret.
 
 Back it up. Copy it to OneDrive, SharePoint, a network drive, wherever your important files live. Do it regularly, especially after you have added something new. If you use the file as a personal macro library built up over years, losing it is a genuinely painful experience.
 
-Experienced Excel users set it up once, years ago and never thought about it again. That is why it rarely comes up in conversation.
+*Experienced Excel users set this up once, years ago and never thought about it again. That is why it rarely comes up in conversation.*
 
 
 

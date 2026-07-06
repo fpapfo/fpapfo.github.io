@@ -11,9 +11,8 @@ The most common answer is: in the workbook where you built it. Which means it tr
 
 One important note before you run macros: macros cannot be undone (CTRL-Z). Excel's undo stack doesn't apply to VBA changes. If you are running a macro against a workbook, save your workbook first so you have an up-to-date restore point.
 
-```
-PERSONAL.XLSB is one approach to macro storage. There are others: add-ins, the Quick Access Toolbar, and a custom ribbon tab each have their own use cases. Those are worth a post of their own.
-```
+*PERSONAL.XLSB is one approach to macro storage. There are others: add-ins, the Quick Access Toolbar, and a custom ribbon tab each have their own use cases. Those are worth a post of their own.*
+
 
 ### Creating it
 

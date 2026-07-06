@@ -16,7 +16,7 @@ One important note before you run macros: macros cannot be undone (CTRL-Z). Exce
 
 ### Creating it
 
-Excel does not create `PERSONAL.XLSB` automatically. You have to trigger it, and the easiest way is through the macro recorder.
+Excel doesn't create `PERSONAL.XLSB` automatically. You have to trigger it, and the easiest way is through the macro recorder.
 
 (If you do not have the Developer tab visible, go to **File > Options > 'Customize' the Ribbon**, tick Developer in the right-hand column, and click OK.)
 
@@ -26,7 +26,7 @@ Open the VBA editor with `Alt+F11`. In the Project Explorer on the left, find **
 
 To run any macro stored in `PERSONAL.XLSB` against another workbook, bring that workbook to the front so it becomes the 'active window', then use `Alt+F8` to open the macro list, pick the macro you want, and select Run.
 
-(Alternatively to run a macro you can **Developer > MAcros** and select the macro you want to run from the list.)
+(Alternatively to run a macro you can go through the tab **Developer > Macros** and select the macro you want to run from the list.)
 
 
 ### Finding the file

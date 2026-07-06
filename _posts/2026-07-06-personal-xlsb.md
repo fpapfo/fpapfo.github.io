@@ -3,6 +3,8 @@ title: "The macro workbook that opens every time Excel does"
 excerpt: "PERSONAL.XLSB makes your macros available in every workbook, every session. Here is how to create it, find it and ensure you never lose it."
 ---
 
+3 Minute Read
+
 Every macro you write lives somewhere. The question is where, and whether it will be there the next time you need it.
 
 The most common answer is: in the workbook where you built it. Which means it travels with that workbook, it is unavailable everywhere else, and if you ever send the file to someone else, the macro goes with it whether you intended that or not. `PERSONAL.XLSB` is the alternative. It is a hidden workbook that Excel opens automatically at startup. You will not see it in the taskbar or the window switcher; it runs quietly in the background, making every macro stored in it available in any workbook, in any session, on that machine.

@@ -9,6 +9,31 @@
   fill: currentColor; /* icon inherits link color */
 }
 
+/* added 13-07-26 to allow a TOC in my articles */
+.toc-box {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid #d8d8d8;
+  border-left: 4px solid #1f4e79; /* your navy */
+  border-radius: 4px;
+  background: #f8f9fa;
+}
+.toc-box h3,
+.toc-box h4 {
+  margin-top: 0;
+}
+.toc-box ul {
+  margin-bottom: 0;
+}
+.toc-box a {
+    text-decoration: none;
+}
+.toc-box a:hover {
+    text-decoration: underline;
+}
+
+
+
 /* added 23-Jun-26 to round image borders */
 img {
   border-radius: 8px;

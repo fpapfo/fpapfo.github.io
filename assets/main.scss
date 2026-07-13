@@ -32,7 +32,7 @@
     text-decoration: underline;
 }
 
-
+/* note 13-07-26 Investigate VS Code SCSS warning on main.scss ({ expected on @import "minima";). Website builds correctly. Occurred after adding .toc-box Suspect Jekyll front matter/linter interaction. */
 
 /* added 23-Jun-26 to round image borders */
 img {

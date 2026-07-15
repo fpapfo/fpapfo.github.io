@@ -33,10 +33,10 @@ For most of the jobs AI is given, that variation is harmless, even useful; it's 
 This is the gap that a prompt can't close on its own. However careful the wording, you are still asking a probabilistic system to produce a result you need to be exact, and hoping it obliges. Hope is not a control. The answer is not a better prompt; it's to stop asking the model to do the parts that must be deterministic and to give those parts to something that behaves the same way every time.
 
 In finance, that requirement isn't optional.
-    - The numbers have to be consistent, so that this month can be compared with last. 
-    - They have to be reliable, because decisions and (eventually) filed accounts rest on them. 
-    - They have to be comparable across periods and entities, or the comparison means nothing. 
-    - And they have to be auditable, the strictest test of all: someone who was not there must be able to see what was done.
+  - The numbers have to be consistent, so that this month can be compared with last. 
+  - They have to be reliable, because decisions and (eventually) filed accounts rest on them. 
+  - They have to be comparable across periods and entities, or the comparison means nothing. 
+  - And they have to be auditable, the strictest test of all: someone who was not there must be able to see what was done.
 
 A process built on "the model said so" fails that test on the first question.
 

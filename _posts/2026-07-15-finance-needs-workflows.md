@@ -12,8 +12,7 @@ So the useful question is not what you can get an AI to say. It's:
 
 *"What happens when you stop treating AI as something you prompt and start treating it as one governed step inside a process you control?"*
 
-
-In this article (10 minute read)
+10 minute read
 
 
 ### Why a prompt isn't a process
@@ -191,4 +190,3 @@ Beyond the underlying methodology, the course also covers the practical aspects 
 The workflow diagrams shown throughout this article were created using Tactic Financial Workflow Studio. The methodology isn't dependent on the software, but I found it an excellent way to visualise, communicate and refine finance workflows before and during the build.
 
 If you'd like to explore the methodology in more depth and learn to design and build workflows like these yourself, I'd highly recommend taking a look at the Accelerator.
-

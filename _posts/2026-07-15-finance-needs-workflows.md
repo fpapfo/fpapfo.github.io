@@ -15,8 +15,6 @@ So the useful question is not what you can get an AI to say. It's:
 
 In this article (10 minute read)
 
-<div class="toc-box">
-
 
 ### Why a prompt isn't a process
 

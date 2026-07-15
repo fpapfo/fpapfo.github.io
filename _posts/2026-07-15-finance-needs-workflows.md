@@ -22,7 +22,7 @@ In this article (10 minute read)
 - [Where AI earns its place](#where-ai-earns-its-place)
 - [Why the human remains essential](#why-the-human-remains-essential)
 - [What makes it auditable](#what-makes-it-auditable)
-- [Closing thoughts](#closing-thoughts)
+- [Closing thoughts](#closing-thoughts)</div>
 
 
 

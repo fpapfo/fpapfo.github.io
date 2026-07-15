@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cash Runway — CCC Simulator · Meridian Components</title>
+<style>
+:root{
+  --bg:#f4f5f7; --panel:#ffffff; --ink:#151a22; --muted:#5f6b7a; --line:#e3e7ec;
+  --accent:#F44A22; --accent2:#2563eb; --ok:#0f9d58; --bad:#d93025; --ghost:#c3ccd8;
+  --shadow:0 1px 3px rgba(20,26,34,.06),0 8px 24px rgba(20,26,34,.05);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f1319; --panel:#171d26; --ink:#e8ecf1; --muted:#9aa7b6; --line:#26303c;
+  --ghost:#3a4655; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}}
+:root[data-theme="light"]{--bg:#f4f5f7;--panel:#fff;--ink:#151a22;--muted:#5f6b7a;--line:#e3e7ec;--ghost:#c3ccd8;--shadow:0 1px 3px rgba(20,26,34,.06),0 8px 24px rgba(20,26,34,.05);}
+:root[data-theme="dark"]{--bg:#0f1319;--panel:#171d26;--ink:#e8ecf1;--muted:#9aa7b6;--line:#26303c;--ghost:#3a4655;--shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 20px 60px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;border-bottom:2px solid var(--accent);padding-bottom:14px;margin-bottom:20px}
+.kick{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{margin:4px 0 2px;font-size:23px}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.themebtn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12px}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.panel h2{margin:0 0 14px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.slider{margin-bottom:20px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
+.slider:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.slabel{display:flex;justify-content:space-between;align-items:baseline}
+.slabel b{font-size:14px}
+.slval{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.slval small{font-size:12px;font-weight:500;color:var(--muted)}
+.track{position:relative;height:34px;margin-top:6px}
+input[type=range]{width:100%;margin:0;position:absolute;top:8px;left:0;-webkit-appearance:none;appearance:none;background:transparent;height:18px;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:4px;background:var(--line)}
+input[type=range]::-moz-range-track{height:6px;border-radius:4px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent2);border:2px solid var(--panel);box-shadow:0 1px 3px rgba(0,0,0,.3);margin-top:-6px}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent2);border:2px solid var(--panel)}
+.marks{position:absolute;left:0;right:0;top:22px;height:12px;pointer-events:none}
+.mark{position:absolute;transform:translateX(-50%);font-size:9px;color:var(--muted);white-space:nowrap;top:0}
+.mark::before{content:"";position:absolute;top:-14px;left:50%;width:2px;height:10px;background:var(--muted);transform:translateX(-50%)}
+.mark.base::before{background:var(--muted)}
+.mark.best::before{background:var(--ok)}
+.mark.best{color:var(--ok);font-weight:600}
+.rng{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:14px}
+textarea{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:7px;font:12px inherit;resize:vertical;min-height:38px}
+.ramp{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+.ramp input{flex:1}
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.ro{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow)}
+.ro .lab{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.ro .num{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px}
+.ro.good .num{color:var(--ok)} .ro.bad .num{color:var(--bad)}
+.chartwrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px 8px;box-shadow:var(--shadow)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:4px 2px 10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+svg{width:100%;height:auto;display:block}
+details.ref{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;box-shadow:var(--shadow)}
+details.ref summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.levcol{margin-top:10px}
+.levcol h4{margin:8px 0 4px;font-size:12px}
+.levcol ul{margin:0;padding-left:16px}
+.levcol li{font-size:12px;margin:2px 0;color:var(--muted)}
+.levcol li b{color:var(--ink)}
+.scz{margin-top:16px}
+.scz .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+input[type=text]{flex:1;min-width:160px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:8px}
+button.act{border:none;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px}
+button.pri{background:var(--accent2);color:#fff}
+button.sec{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+button.exp{background:var(--accent);color:#fff}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+td.brc-yes{color:var(--bad);font-weight:600} td.brc-no{color:var(--ok);font-weight:600}
+.mini{font-size:11px;color:var(--muted)}
+.linkbtn{background:none;border:none;color:var(--accent2);cursor:pointer;font-size:11px;padding:2px 4px}
+.note{font-size:11px;color:var(--muted);margin-top:4px}
+</style></head>
+<body><div class="wrap">
+<header class="top">
+  <div>
+    <div class="kick">All figures are synthetic curtesy of Tactic Financial</div>
+    <h1>Cash Conversion Cycle — Decision Simulator</h1>
+    <p class="sub">Meridian Components Inc. · covenant $1.5M · move the levers, keep every month above the line</p>
+  </div>
+  <button class="themebtn" id="themeToggle">◑ Theme</button>
+</header>
+
+<div class="grid">
+  <!-- LEFT: controls -->
+  <div>
+    <div class="panel">
+      <h2>Working-capital levers</h2>
+      <div id="sliders"></div>
+      <div style="margin-top:18px;border-top:1px dashed var(--line);padding-top:14px">
+        <div class="slabel"><b>Improvement ramp</b><span class="slval" id="rampVal" style="font-size:16px"></span></div>
+        <div class="ramp"><span class="mini">1 mo</span><input type="range" id="ramp" min="1" max="6" step="1" value="3"><span class="mini">6 mo</span></div>
+        <div class="note">Days phase linearly from today's baseline to the target over this many months, then hold.</div>
+      </div>
+    </div>
+
+    <details class="ref"><summary>Reference — levers &amp; day impacts</summary>
+      <div id="refPanel"></div>
+    </details>
+
+    <div class="panel scz">
+      <h2>Scenarios</h2>
+      <div class="row">
+        <input type="text" id="scName" placeholder="Scenario name (e.g. Realistic best)">
+        <button class="act pri" id="saveBtn">Save</button>
+      </div>
+      <div id="scMsg" class="note"></div>
+      <div id="scTable"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="act exp" id="exportBtn">⤓ Export JSON + brief</button>
+        <button class="act sec" id="loadBaseBtn">Reset to baseline</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: chart + readouts -->
+  <div>
+    <div class="readouts" id="readouts"></div>
+    <div class="chartwrap">
+      <div class="legend">
+        <span><i style="background:var(--accent2)"></i>Scenario ending cash</span>
+        <span><i style="background:var(--bad)"></i>Below covenant</span>
+        <span><i style="background:var(--ghost)"></i>Baseline (ghost)</span>
+        <span><i style="background:var(--accent);height:2px;border-radius:0"></i>$1.5M covenant line</span>
+      </div>
+      <svg id="chart" viewBox="0 0 920 420" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Projected ending cash by month"></svg>
+    </div>
+  </div>
+</div>
+</div>
+
+<script id="model" type="application/json">{
+  "as_of": "2026-06-30",
+  "opening_cash": 2014283,
+  "min_cash": 1500000,
+  "cost_of_cash": 0.1,
+  "opening_balances": {
+    "ar": 5436537,
+    "inventory": 5123154,
+    "ap": 2167329
+  },
+  "baseline": {
+    "dso": 54.5,
+    "dio": 79.1,
+    "dpo": 33.5,
+    "ccc": 100.1
+  },
+  "baseline_12mo_ago": {
+    "dso": 39.7,
+    "dio": 58.9,
+    "dpo": 41.1,
+    "ccc": 57.5
+  },
+  "realistic_best": {
+    "dso": 44,
+    "dio": 62,
+    "dpo": 45
+  },
+  "slider_ranges": {
+    "dso": [
+      35,
+      65
+    ],
+    "dio": [
+      45,
+      90
+    ],
+    "dpo": [
+      30,
+      60
+    ]
+  },
+  "plan": [
+    {
+      "month": "2026-07",
+      "revenue": 3043578,
+      "cogs": 1978326,
+      "opex": 815000
+    },
+    {
+      "month": "2026-08",
+      "revenue": 3055752,
+      "cogs": 1986239,
+      "opex": 815000
+    },
+    {
+      "month": "2026-09",
+      "revenue": 3067975,
+      "cogs": 1994184,
+      "opex": 815000
+    },
+    {
+      "month": "2026-10",
+      "revenue": 3080247,
+      "cogs": 2002161,
+      "opex": 815000
+    },
+    {
+      "month": "2026-11",
+      "revenue": 3092568,
+      "cogs": 2010169,
+      "opex": 815000
+    },
+    {
+      "month": "2026-12",
+      "revenue": 3104938,
+      "cogs": 2018210,
+      "opex": 815000
+    },
+    {
+      "month": "2027-01",
+      "revenue": 3117358,
+      "cogs": 2026283,
+      "opex": 815000
+    },
+    {
+      "month": "2027-02",
+      "revenue": 3129827,
+      "cogs": 2034388,
+      "opex": 815000
+    },
+    {
+      "month": "2027-03",
+      "revenue": 3142347,
+      "cogs": 2042526,
+      "opex": 815000
+    },
+    {
+      "month": "2027-04",
+      "revenue": 3154916,
+      "cogs": 2050695,
+      "opex": 815000
+    },
+    {
+      "month": "2027-05",
+      "revenue": 3167536,
+      "cogs": 2058898,
+      "opex": 815000
+    },
+    {
+      "month": "2027-06",
+      "revenue": 3180206,
+      "cogs": 2067134,
+      "opex": 815000
+    }
+  ],
+  "disbursements": [
+    {
+      "month": "2026-07",
+      "item": "CNC machining line replacement - deposit",
+      "category": "capex",
+      "amount": 600000
+    },
+    {
+      "month": "2026-07",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2026-08",
+      "item": "Plant maintenance capex",
+      "category": "capex",
+      "amount": 30000
+    },
+    {
+      "month": "2026-08",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2026-09",
+      "item": "CNC machining line replacement - delivery payment",
+      "category": "capex",
+      "amount": 1000000
+    },
+    {
+      "month": "2026-09",
+      "item": "Corporate tax installment",
+      "category": "tax",
+      "amount": 150000
+    },
+    {
+      "month": "2026-09",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2026-10",
+      "item": "CNC machining line - installation and commissioning",
+      "category": "capex",
+      "amount": 400000
+    },
+    {
+      "month": "2026-10",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2026-11",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2026-12",
+      "item": "Corporate tax installment",
+      "category": "tax",
+      "amount": 150000
+    },
+    {
+      "month": "2026-12",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2027-01",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2027-02",
+      "item": "Plant maintenance capex",
+      "category": "capex",
+      "amount": 35000
+    },
+    {
+      "month": "2027-02",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2027-03",
+      "item": "Corporate tax installment",
+      "category": "tax",
+      "amount": 150000
+    },
+    {
+      "month": "2027-03",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2027-04",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2027-05",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    },
+    {
+      "month": "2027-06",
+      "item": "Corporate tax installment",
+      "category": "tax",
+      "amount": 150000
+    },
+    {
+      "month": "2027-06",
+      "item": "Term loan debt service",
+      "category": "debt",
+      "amount": 75000
+    }
+  ],
+  "levers": {
+    "dso": [
+      {
+        "name": "Systematic dunning cadence",
+        "days": 4
+      },
+      {
+        "name": "Enforce terms with Hartwell & Dominion",
+        "days": 4
+      },
+      {
+        "name": "Stop new Net 60 without CFO sign-off",
+        "days": 2
+      },
+      {
+        "name": "Deposits on large orders",
+        "days": 2
+      },
+      {
+        "name": "Early-pay discount offer",
+        "days": 1
+      },
+      {
+        "name": "Factoring (last resort)",
+        "days": 3
+      }
+    ],
+    "dio": [
+      {
+        "name": "Recalibrate raw safety stock to 2.5 mo policy",
+        "days": 10
+      },
+      {
+        "name": "Sell through / discount MC-series slow movers",
+        "days": 4
+      },
+      {
+        "name": "Purge & write down obsolete SKUs",
+        "days": 2
+      },
+      {
+        "name": "Tighter reorder points (just-in-time)",
+        "days": 2
+      },
+      {
+        "name": "SKU rationalization",
+        "days": 1
+      }
+    ],
+    "dpo": [
+      {
+        "name": "Pay on due date, not on receipt (payment calendar)",
+        "days": 8
+      },
+      {
+        "name": "Renegotiate top vendors toward Net 60",
+        "days": 3
+      },
+      {
+        "name": "Standardize to Net 45/60 where relationship allows",
+        "days": 2
+      }
+    ]
+  },
+  "formulas": {
+    "ar": "DSO/365 * revenue_month * 12",
+    "inv": "DIO/365 * cogs_month * 12",
+    "ap": "DPO/365 * cogs_month * 12",
+    "ni": "revenue - cogs - opex",
+    "dWC": "(AR-AR_prev)+(INV-INV_prev)-(AP-AP_prev)",
+    "cash": "cash_prev + NI - dWC - disbursements",
+    "ramp": "days interpolate linearly baseline->target over ramp months, then hold"
+  },
+  "baseline_forecast": [
+    {
+      "month": "2026-07",
+      "cash": 1562609
+    },
+    {
+      "month": "2026-08",
+      "cash": 1678446
+    },
+    {
+      "month": "2026-09",
+      "cash": 678425
+    },
+    {
+      "month": "2026-10",
+      "cash": 432564
+    },
+    {
+      "month": "2026-11",
+      "cash": 590881
+    },
+    {
+      "month": "2026-12",
+      "cash": 603389
+    },
+    {
+      "month": "2027-01",
+      "cash": 770108
+    },
+    {
+      "month": "2027-02",
+      "cash": 906054
+    },
+    {
+      "month": "2027-03",
+      "cash": 931242
+    },
+    {
+      "month": "2027-04",
+      "cash": 1110695
+    },
+    {
+      "month": "2027-05",
+      "cash": 1294423
+    },
+    {
+      "month": "2027-06",
+      "cash": 1332446
+    }
+  ],
+  "breach": {
+    "first_month": "2026-09",
+    "first_cash": 678425,
+    "trough_month": "2026-10",
+    "trough_cash": 432564,
+    "trough_gap": 1067436,
+    "ccc_days_to_close": 14.0,
+    "recovers_within_horizon": false
+  }
+}</script>
+<script>
+const MODEL = JSON.parse(document.getElementById('model').textContent);
+const MIN = MODEL.min_cash;
+const KPI = [
+  {key:'dso', label:'DSO', full:'Days Sales Outstanding', dir:'lower'},
+  {key:'dio', label:'DIO', full:'Days Inventory Outstanding', dir:'lower'},
+  {key:'dpo', label:'DPO', full:'Days Payable Outstanding', dir:'higher'}
+];
+// sum disbursements per month
+const disbByMonth = {};
+MODEL.disbursements.forEach(d => { disbByMonth[d.month] = (disbByMonth[d.month]||0) + d.amount; });
+
+const state = {
+  dso: MODEL.baseline.dso, dio: MODEL.baseline.dio, dpo: MODEL.baseline.dpo,
+  ramp: 3, notes: {dso:'', dio:'', dpo:''}
+};
+
+// ---- recalc (mirrors ccc-report exactly) ----
+function dayAt(baseline, target, t, ramp){ const f = Math.min(t/ramp, 1); return baseline + (target-baseline)*f; }
+function project(dsoT, dioT, dpoT, ramp){
+  const b = MODEL.baseline, ob = MODEL.opening_balances;
+  let cash = MODEL.opening_cash, pAR = ob.ar, pINV = ob.inventory, pAP = ob.ap;
+  const out = [];
+  MODEL.plan.forEach((p,i)=>{
+    const t=i+1;
+    const dso=dayAt(b.dso,dsoT,t,ramp), dio=dayAt(b.dio,dioT,t,ramp), dpo=dayAt(b.dpo,dpoT,t,ramp);
+    const AR=dso/365*p.revenue*12, INV=dio/365*p.cogs*12, AP=dpo/365*p.cogs*12;
+    const NI=p.revenue-p.cogs-p.opex;
+    const dWC=(AR-pAR)+(INV-pINV)-(AP-pAP);
+    const d=disbByMonth[p.month]||0;
+    cash=cash+NI-dWC-d;
+    out.push({month:p.month, cash});
+    pAR=AR; pINV=INV; pAP=AP;
+  });
+  return out;
+}
+const BASELINE = project(MODEL.baseline.dso, MODEL.baseline.dio, MODEL.baseline.dpo, 1);
+
+const fmt = v => (v<0?'-$':'$') + Math.abs(Math.round(v)).toLocaleString('en-US');
+const fmtM = v => (v<0?'-$':'$') + (Math.abs(v)/1e6).toFixed(2) + 'M';
+const pct = (v,min,max)=>((v-min)/(max-min))*100;
+
+// ---- build sliders ----
+function buildSliders(){
+  const host=document.getElementById('sliders'); host.innerHTML='';
+  KPI.forEach(k=>{
+    const [mn,mx]=MODEL.slider_ranges[k.key];
+    const base=MODEL.baseline[k.key], best=(MODEL.realistic_best||{})[k.key];
+    const div=document.createElement('div'); div.className='slider';
+    div.innerHTML=`
+      <div class="slabel"><b>${k.label} <small style="color:var(--muted);font-weight:500">${k.full}</small></b>
+        <span class="slval"><span id="v_${k.key}">${state[k.key]}</span><small> days</small></span></div>
+      <div class="track">
+        <input type="range" id="s_${k.key}" min="${mn}" max="${mx}" step="0.1" value="${state[k.key]}">
+        <div class="marks">
+          <div class="mark base" style="left:${pct(base,mn,mx)}%">base ${base}</div>
+          ${best!=null?`<div class="mark best" style="left:${pct(best,mn,mx)}%">best ${best}</div>`:''}
+        </div>
+      </div>
+      <div class="rng"><span>${mn}</span><span>${mx}</span></div>
+      <textarea id="n_${k.key}" placeholder="Measures to get here…">${state.notes[k.key]}</textarea>`;
+    host.appendChild(div);
+  });
+  KPI.forEach(k=>{
+    document.getElementById('s_'+k.key).addEventListener('input',e=>{
+      state[k.key]=parseFloat(e.target.value);
+      document.getElementById('v_'+k.key).textContent=state[k.key].toFixed(1).replace(/\.0$/,'');
+      render();
+    });
+    document.getElementById('n_'+k.key).addEventListener('input',e=>{state.notes[k.key]=e.target.value;});
+  });
+}
+document.getElementById('ramp').addEventListener('input',e=>{
+  state.ramp=parseInt(e.target.value); document.getElementById('rampVal').textContent=state.ramp+' mo'; render();
+});
+
+// ---- reference panel ----
+function buildRef(){
+  const host=document.getElementById('refPanel'); const L=MODEL.levers||{};
+  host.innerHTML=KPI.map(k=>{
+    const arr=L[k.key]||[];
+    return `<div class="levcol"><h4>${k.label}</h4><ul>${arr.map(x=>`<li><b>${x.days}d</b> — ${x.name}</li>`).join('')||'<li>—</li>'}</ul></div>`;
+  }).join('');
+}
+
+// ---- chart ----
+function drawChart(scenario){
+  const W=920,H=420, padL=64,padR=16,padT=16,padB=54;
+  const n=scenario.length, iw=W-padL-padR, ih=H-padT-padB;
+  const all=scenario.map(d=>d.cash).concat(BASELINE.map(d=>d.cash)).concat([MIN,0]);
+  let yMax=Math.max(...all)*1.08, yMin=Math.min(0,...all);
+  const y=v=> padT+ih-((v-yMin)/(yMax-yMin))*ih;
+  const bw=iw/n, barW=bw*0.56;
+  let s='';
+  // y gridlines
+  const ticks=5;
+  for(let i=0;i<=ticks;i++){const val=yMin+(yMax-yMin)*i/ticks; const yy=y(val);
+    s+=`<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="var(--line)" stroke-width="1"/>`;
+    s+=`<text x="${padL-8}" y="${yy+4}" text-anchor="end" font-size="10" fill="var(--muted)">${fmtM(val)}</text>`;}
+  // ghost baseline bars
+  scenario.forEach((d,i)=>{const bx=padL+i*bw+(bw-barW)/2;
+    const gb=BASELINE[i].cash; const gy=y(Math.max(gb,yMin));
+    s+=`<rect x="${bx-3}" y="${gy}" width="${barW}" height="${Math.max(0,y(yMin)-gy)}" fill="var(--ghost)" opacity="0.5" rx="2"/>`;});
+  // scenario bars
+  scenario.forEach((d,i)=>{const bx=padL+i*bw+(bw-barW)/2;
+    const yy=y(Math.max(d.cash,yMin)); const zy=y(Math.max(0,yMin));
+    const below=d.cash<MIN; const col=below?'var(--bad)':'var(--accent2)';
+    const h=Math.max(0,zy-yy);
+    s+=`<rect x="${bx}" y="${yy}" width="${barW}" height="${h}" fill="${col}" rx="2"><title>${d.month}: ${fmt(d.cash)}</title></rect>`;
+    // value label
+    s+=`<text x="${bx+barW/2}" y="${yy-4}" text-anchor="middle" font-size="9" fill="var(--muted)">${(d.cash/1e6).toFixed(2)}</text>`;
+    // x label
+    s+=`<text x="${bx+barW/2}" y="${H-padB+16}" text-anchor="middle" font-size="9" fill="var(--muted)" transform="rotate(0)">${d.month.slice(2)}</text>`;});
+  // covenant line
+  const my=y(MIN);
+  s+=`<line x1="${padL}" y1="${my}" x2="${W-padR}" y2="${my}" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 4"/>`;
+  s+=`<text x="${W-padR}" y="${my-6}" text-anchor="end" font-size="10" fill="var(--accent)" font-weight="700">Covenant ${fmtM(MIN)}</text>`;
+  document.getElementById('chart').innerHTML=s;
+}
+
+// ---- readouts ----
+function analyse(scenario){
+  const trough=scenario.reduce((a,b)=>b.cash<a.cash?b:a);
+  const baseTrough=BASELINE.reduce((a,b)=>b.cash<a.cash?b:a);
+  const atBaseTrough=scenario.find(d=>d.month===baseTrough.month).cash;
+  const freed=atBaseTrough-baseTrough.cash;
+  const breachIdx=scenario.findIndex(d=>d.cash<MIN);
+  const breach=breachIdx>=0;
+  const runway=breach?breachIdx:scenario.length;
+  const cccTarget=state.dso+state.dio-state.dpo;
+  return {trough,freed,breach,runway,cccTarget,baseTrough};
+}
+function buildReadouts(a){
+  const host=document.getElementById('readouts');
+  const cards=[
+    {lab:'Target CCC',num:a.cccTarget.toFixed(1)+' d',cls:''},
+    {lab:'Lowest-cash month',num:a.trough.month+' · '+fmtM(a.trough.cash),cls:a.trough.cash<MIN?'bad':'good'},
+    {lab:'Cash freed vs baseline',num:(a.freed>=0?'+':'')+fmtM(a.freed),cls:a.freed>=0?'good':'bad'},
+    {lab:'Runway (mo above line)',num:a.breach?a.runway+' mo':'12+ (no breach)',cls:a.breach?'bad':'good'},
+    {lab:'Covenant breach?',num:a.breach?'YES':'No',cls:a.breach?'bad':'good'}
+  ];
+  host.innerHTML=cards.map(c=>`<div class="ro ${c.cls}"><div class="lab">${c.lab}</div><div class="num">${c.num}</div></div>`).join('');
+}
+
+function render(){
+  const sc=project(state.dso,state.dio,state.dpo,state.ramp);
+  drawChart(sc); buildReadouts(analyse(sc));
+  window._current=sc;
+}
+
+// ---- scenarios (localStorage) ----
+const LS_KEY='ccc_scenarios_meridian';
+let lsOK=true; try{localStorage.setItem('_t','1');localStorage.removeItem('_t');}catch(e){lsOK=false;}
+function loadScenarios(){ if(!lsOK)return []; try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch(e){return [];} }
+function saveScenarios(a){ if(lsOK) localStorage.setItem(LS_KEY,JSON.stringify(a)); }
+function snapshot(name){
+  const sc=project(state.dso,state.dio,state.dpo,state.ramp); const a=analyse(sc);
+  return {name, dso:state.dso, dio:state.dio, dpo:state.dpo, ramp:state.ramp,
+    notes:{...state.notes}, ccc:+a.cccTarget.toFixed(1), trough_month:a.trough.month,
+    trough_cash:Math.round(a.trough.cash), breach:a.breach, freed:Math.round(a.freed)};
+}
+function renderScTable(){
+  const arr=loadScenarios(); const host=document.getElementById('scTable');
+  if(!arr.length){host.innerHTML='<div class="note">No saved scenarios yet.</div>';return;}
+  let h='<table><thead><tr><th>Scenario</th><th>CCC</th><th>Trough</th><th>Breach</th><th></th></tr></thead><tbody>';
+  arr.forEach((s,i)=>{h+=`<tr><td>${s.name}</td><td>${s.ccc}</td><td>${fmtM(s.trough_cash)}<div class="mini">${s.trough_month}</div></td>
+    <td class="${s.breach?'brc-yes':'brc-no'}">${s.breach?'Yes':'No'}</td>
+    <td><button class="linkbtn" data-load="${i}">load</button><button class="linkbtn" data-del="${i}">del</button></td></tr>`;});
+  h+='</tbody></table>';
+  // baseline reference row
+  const ba=analyse(BASELINE);
+  h+=`<div class="mini" style="margin-top:6px">Baseline: CCC ${MODEL.baseline.ccc} · trough ${fmtM(ba.trough.cash)} (${ba.trough.month}) · breach Yes</div>`;
+  host.innerHTML=h;
+  host.querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>applyScenario(arr[+b.dataset.load]));
+  host.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{arr.splice(+b.dataset.del,1);saveScenarios(arr);renderScTable();});
+}
+function applyScenario(s){
+  state.dso=s.dso;state.dio=s.dio;state.dpo=s.dpo;state.ramp=s.ramp;state.notes={...s.notes};
+  document.getElementById('ramp').value=s.ramp; document.getElementById('rampVal').textContent=s.ramp+' mo';
+  buildSliders(); render();
+}
+document.getElementById('saveBtn').onclick=()=>{
+  const name=(document.getElementById('scName').value||'').trim()||('Scenario '+(loadScenarios().length+1));
+  if(!lsOK){document.getElementById('scMsg').textContent='localStorage unavailable — save disabled in this browser mode.';return;}
+  const arr=loadScenarios(); arr.push(snapshot(name)); saveScenarios(arr);
+  document.getElementById('scName').value=''; document.getElementById('scMsg').textContent='Saved "'+name+'".'; renderScTable();
+};
+document.getElementById('loadBaseBtn').onclick=()=>{
+  state.dso=MODEL.baseline.dso;state.dio=MODEL.baseline.dio;state.dpo=MODEL.baseline.dpo;state.ramp=3;state.notes={dso:'',dio:'',dpo:''};
+  document.getElementById('ramp').value=3;document.getElementById('rampVal').textContent='3 mo';buildSliders();render();
+};
+
+// ---- export ----
+function download(filename, text, type){
+  const blob=new Blob([text],{type}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click();
+  a.remove(); URL.revokeObjectURL(url);
+}
+document.getElementById('exportBtn').onclick=()=>{
+  const sc=project(state.dso,state.dio,state.dpo,state.ramp); const a=analyse(sc);
+  const payload={
+    generated_from:'ccc-simulator', as_of:MODEL.as_of, covenant:MIN, opening_cash:MODEL.opening_cash,
+    baseline:MODEL.baseline, formulas:MODEL.formulas,
+    current_scenario:{dso:state.dso,dio:state.dio,dpo:state.dpo,ramp:state.ramp,notes:state.notes,
+      ccc_target:+a.cccTarget.toFixed(1), trough:{month:a.trough.month,cash:Math.round(a.trough.cash)},
+      cash_freed_vs_baseline:Math.round(a.freed), breach:a.breach, runway_months:a.runway,
+      cash_path:sc.map(d=>({month:d.month,cash:Math.round(d.cash)}))},
+    baseline_path:BASELINE.map(d=>({month:d.month,cash:Math.round(d.cash)})),
+    saved_scenarios:loadScenarios()
+  };
+  download('scenarios-export.json', JSON.stringify(payload,null,2), 'application/json');
+
+  const L=(k)=>state.notes[k]?state.notes[k]:'—';
+  const brief=`# CCC Scenario Brief — Meridian Components Inc.
+_As of ${MODEL.as_of}. Covenant minimum: ${fmtM(MIN)}. Opening cash: ${fmt(MODEL.opening_cash)}._
+
+## Targets (this scenario)
+| KPI | Baseline | Target | Δ days |
+|---|---|---|---|
+| DSO | ${MODEL.baseline.dso} | ${state.dso} | ${(state.dso-MODEL.baseline.dso).toFixed(1)} |
+| DIO | ${MODEL.baseline.dio} | ${state.dio} | ${(state.dio-MODEL.baseline.dio).toFixed(1)} |
+| DPO | ${MODEL.baseline.dpo} | ${state.dpo} | ${(state.dpo-MODEL.baseline.dpo).toFixed(1)} |
+| **CCC** | **${MODEL.baseline.ccc}** | **${a.cccTarget.toFixed(1)}** | **${(a.cccTarget-MODEL.baseline.ccc).toFixed(1)}** |
+
+Ramp: improvements phase in linearly over **${state.ramp} month(s)**, then hold.
+
+## Result
+- **Lowest-cash month:** ${a.trough.month} at ${fmt(a.trough.cash)}
+- **Cash freed vs baseline (at baseline trough ${a.baseTrough.month}):** ${(a.freed>=0?'+':'')}${fmt(a.freed)}
+- **Covenant breach:** ${a.breach?'YES — still breaches':'No — every month stays above '+fmtM(MIN)}
+- **Runway:** ${a.breach?a.runway+' months above the line before breach':'no breach in the 12-month horizon'}
+
+## Measures to get here
+- **DSO:** ${L('dso')}
+- **DIO:** ${L('dio')}
+- **DPO:** ${L('dpo')}
+
+## Projected ending cash
+| Month | Scenario | Baseline |
+|---|---|---|
+${sc.map((d,i)=>`| ${d.month} | ${fmt(d.cash)} | ${fmt(BASELINE[i].cash)} |`).join('\n')}
+
+## Model (ties to the CCC report)
+AR = DSO/365 × revenue × 12 · Inv = DIO/365 × COGS × 12 · AP = DPO/365 × COGS × 12
+cash_t = cash_(t-1) + (rev − COGS − opex) − ΔWC − disbursements
+_Generated by the Cash Runway ccc-simulator. Paste into a forecasting/modeling session as context._
+`;
+  download('ccc-scenario-brief.md', brief, 'text/markdown');
+};
+
+// theme toggle
+document.getElementById('themeToggle').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':(cur==='light'?'dark':(matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark'));
+  document.documentElement.setAttribute('data-theme',next); render();
+};
+
+// init
+document.getElementById('rampVal').textContent=state.ramp+' mo';
+buildSliders(); buildRef(); render(); renderScTable();
+</script>
+</body></html>

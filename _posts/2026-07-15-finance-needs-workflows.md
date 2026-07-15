@@ -69,15 +69,19 @@ AI-enabled finance workflows don't all look the same. Some improve existing fina
 A deterministic step earns its place because of what becomes possible once you have it. 
 
 **Genuine comparability**
+
 If this month's variance is calculated by exactly the same process as last month's, then a change in the result means the business changed, not that the method drifted. That sounds obvious, but finance processes can fail here: a spreadsheet edited by hand each month, a formula someone extended differently, a step that depends on who ran it. When the process is fixed, the comparison is clean, and comparison is most of what management reporting is for.
 
 **Controls**
+
 A step that behaves identically every time is a step you can put a control around, because you know what it should produce and can test that it did. You can reconcile its output, check it against a total, prove it. A probabilistic step cannot be controlled in the same way; you can review what it produced, but you can't know in advance exactly what it will say. This is precisely why the deterministic and probabilistic work must sit in different layers: controls belong on the parts that have a right answer, and the parts that have a right answer must be the ones producing your figures.
 
 **Repeatability**
+
 A workflow built this way runs the same next month, and the month after. You're not rebuilding it; you're running it. The effort goes in once, into shaping and proving the process, and after that the month-end that used to consume days of careful assembly becomes a process you execute and check. That's not only faster. It's safer, because the thing most likely to introduce an error, a person rebuilding the same work by hand under time pressure, has been taken out of the path.
 
 **Supporting Documentation**
+
 Because the process is fixed, the shape of its evidence can be fixed too. A deterministic step can be made to produce not just a figure but a record of how the figure was reached. I've started building this into my workflows as an output file: an Excel workbook showing the calculations with the formulas behind them, tying to the final numbers, laid out the same way every month. A figure you can reproduce is good; a figure you can reproduce and evidence in a consistent form is what finance actually needs.
 
 

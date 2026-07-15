@@ -178,7 +178,7 @@ The numbers still have to be right, and they still have to be yours. This just g
 
 
 <p>
-  <a href="\assets/tools/ccc-simulator.html" target="_blank" rel="noopener noreferrer">
+  <a href="/assets/tools/ccc-simulator.html" target="_blank" rel="noopener noreferrer">
     Open the cash simulator in a new tab
   </a>
   <span aria-hidden="true">↗</span>

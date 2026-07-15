@@ -22,6 +22,8 @@ In this article (10 minute read):
 - [Closing thoughts](#closing-thoughts)
 
 
+
+
 ### Why a prompt isn't a process
 
 A large language model (LLM) is probabilistic by design. Ask the same question twice and you'll likely get two answers that are both reasonable and not quite the same. 
@@ -37,6 +39,7 @@ In finance, that requirement isn't optional.
     - And they have to be auditable, the strictest test of all: someone who was not there must be able to see what was done.
 
 A process built on "the model said so" fails that test on the first question.
+
 
 
 
@@ -71,21 +74,23 @@ AI-enabled finance workflows don't all look the same. Some improve existing fina
 
 
 
+
 ### What determinism buys you
 
 A deterministic step earns its place because of what becomes possible once you have it. 
 
-**Genuine comparability**<BR>
+**Genuine comparability**
 If this month's variance is calculated by exactly the same process as last month's, then a change in the result means the business changed, not that the method drifted. That sounds obvious, but finance processes can fail here: a spreadsheet edited by hand each month, a formula someone extended differently, a step that depends on who ran it. When the process is fixed, the comparison is clean, and comparison is most of what management reporting is for.
 
-**Controls**<BR>
+**Controls**
 A step that behaves identically every time is a step you can put a control around, because you know what it should produce and can test that it did. You can reconcile its output, check it against a total, prove it. A probabilistic step cannot be controlled in the same way; you can review what it produced, but you can't know in advance exactly what it will say. This is precisely why the deterministic and probabilistic work must sit in different layers: controls belong on the parts that have a right answer, and the parts that have a right answer must be the ones producing your figures.
 
-**Repeatability**<BR>
+**Repeatability**
 A workflow built this way runs the same next month, and the month after. You're not rebuilding it; you're running it. The effort goes in once, into shaping and proving the process, and after that the month-end that used to consume days of careful assembly becomes a process you execute and check. That's not only faster. It's safer, because the thing most likely to introduce an error, a person rebuilding the same work by hand under time pressure, has been taken out of the path.
 
-**Supporting Documentation**<BR>
+**Supporting Documentation**
 Because the process is fixed, the shape of its evidence can be fixed too. A deterministic step can be made to produce not just a figure but a record of how the figure was reached. I've started building this into my workflows as an output file: an Excel workbook showing the calculations with the formulas behind them, tying to the final numbers, laid out the same way every month. A figure you can reproduce is good; a figure you can reproduce and evidence in a consistent form is what finance actually needs.
+
 
 
 
@@ -111,6 +116,7 @@ A well-built step can also be told when not to guess. Some questions cannot be a
 
 **Decision Support Tools**<BR>
 There is one more thing a process like this can produce: not just evidence to review, but a tool to use. The second workflow example ends in a cash simulator, a single self-contained HTML file (it opens in any browser with nothing to install), with a slider for each lever and a covenant line that moves as you do. It is only trustworthy because of everything above it: the numbers it starts from were reconciled and reproducible, and the assumptions it carries are the ones the checkpoint named. An auditable process not only lets you check the past; it lets you build something you can act on, because you know what's underneath it.
+
 
 
 
@@ -140,6 +146,7 @@ This is the reason none of this can be delegated to an LLM. When the numbers go 
 
 
 
+
 ### What makes it auditable
 
 An auditor, a reviewer, or you looking back six months later, doesn't want to be simply told the numbers are right. They want to be shown *how they were reached*, and to satisfy themselves without having been in the room. A workflow built the way I've described can give them that, because auditability was designed in rather than added afterwards.
@@ -166,6 +173,7 @@ That is the difference between a result and an audit trail. A result is a number
 
 
 
+
 ### Closing thoughts
 
 None of this replaces finance. The judgement, the challenge, the sign-off and the accountability all stay exactly where they were, with a person who understands the numbers and answers for them. What changes is the machinery underneath: a governed process where the deterministic work is exact and reproducible, the interpretive work is done well and fast, and the human is consulted at the points that need them.
@@ -183,6 +191,7 @@ The numbers still have to be right, and they still have to be yours. This just g
   </a>
   <span aria-hidden="true">↗</span>
 </p>
+
 
 --- 
 

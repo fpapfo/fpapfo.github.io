@@ -16,14 +16,6 @@ So the useful question is not what you can get an AI to say. It's:
 In this article (10 minute read)
 
 <div class="toc-box">
-- [Why a prompt isn't a process](#why-a-prompt-isnt-a-process)
-- [What an AI workflow actually looks like](#what-an-ai-workflow-actually-looks-like)
-- [What determinism buys you](#what-determinism-buys-you)
-- [Where AI earns its place](#where-ai-earns-its-place)
-- [Why the human remains essential](#why-the-human-remains-essential)
-- [What makes it auditable](#what-makes-it-auditable)
-- [Closing thoughts](#closing-thoughts)</div>
-
 
 
 ### Why a prompt isn't a process

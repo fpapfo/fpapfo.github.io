@@ -190,7 +190,7 @@ The numbers still have to be right, and they still have to be yours. This just g
 
 ### Where do you learn how to do this?
 
-The workflow approach described in this article reflects concepts I'm currently exploring through [Tactic Financial's Accelerator with Carolina Lago](https://www.tacticfinancial.com/accelerator).
+The workflow approach described in this article reflects concepts I'm currently exploring through <a href="https://www.tacticfinancial.com/accelerator" target="_blank" rel="noopener noreferrer">Tactic Financial's Accelerator with Carolina Lago</a>.
 
 Beyond the underlying methodology, the course also covers the practical aspects of building AI-enabled finance workflows: designing reusable skills, combining them into governed workflows, and using modern AI development tools effectively.
 

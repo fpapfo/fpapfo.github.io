@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Cost Lever Lab · FTE Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F1; --panel:#FFFFFF; --ink:#20242B; --muted:#67707C;
+  --line:#DFE3DE; --ours:#0E6E62; --ours-soft:#E3F0ED; --ext:#A6452F; --ext-soft:#F5E8E3;
+  --com:#5B5E92; --com-soft:#E9E9F4;
+  --ok:#1E7B4F; --warn:#B4700F; --bad:#A6452F;
+  --seg-basic:#35506B; --seg-bonus:#5B7A96; --seg-pen:#8FA7BC; --seg-ni:#C2764A; --seg-ca:#D9C08A;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --sans:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;
+  --disp:'Newsreader',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;padding:20px}
+.wrap{max-width:1240px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+h1{font-family:var(--disp);font-weight:600;font-size:30px;letter-spacing:-0.01em}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 14px;font:500 13px var(--sans);cursor:pointer;color:var(--ink)}
+.btn:hover{border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:390px 1fr;gap:18px}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.panel h2{font-family:var(--disp);font-size:19px;font-weight:600;margin-bottom:2px}
+.panel .tag{display:inline-block;font:500 10.5px var(--sans);letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:10px}
+.tag.ours{background:var(--ours-soft);color:var(--ours)}
+.tag.ext{background:var(--ext-soft);color:var(--ext)}
+.tag.com{background:var(--com-soft);color:var(--com)}
+.lever{margin-bottom:14px}
+.lever-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.lever-head label{font-weight:600;font-size:13px}
+.lever-head .note{color:var(--muted);font-size:11.5px}
+.yrrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.yr{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+.yr .ylab{font:500 10.5px var(--sans);color:var(--muted);letter-spacing:0.05em}
+.yr .val{font:500 14px var(--mono);margin:1px 0 4px}
+.grp-ours .yr .val.changed{color:var(--ours)}
+.grp-com .yr .val.changed{color:var(--com)}
+.grp-ext .yr .val.changed{color:var(--ext)}
+input[type=range]{width:100%;height:22px}
+.grp-ours input[type=range]{accent-color:var(--ours)}
+.grp-com input[type=range]{accent-color:var(--com)}
+.grp-ext input[type=range]{accent-color:var(--ext)}
+.ca-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ca-cell{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:7px 9px}
+.ca-cell .glab{font-weight:600;font-size:12px}
+.ca-cell .gnote{color:var(--muted);font-size:10.5px;margin-bottom:4px}
+.ca-cell input[type=number]{width:100%;border:1px solid var(--line);border-radius:6px;padding:4px 6px;font:500 13px var(--mono);background:#fff;color:var(--ink)}
+.ca-eff{font:400 10.5px var(--mono);color:var(--muted);margin-top:5px;line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .yl{font:500 11px var(--sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.card .big{font:500 24px var(--mono);margin:4px 0 2px;letter-spacing:-0.02em}
+.card .delta{font:500 13px var(--mono)}
+.delta.up{color:var(--bad)} .delta.down{color:var(--ok)} .delta.flat{color:var(--muted)}
+.card .fte{color:var(--muted);font-size:12px;margin-top:4px}
+svg text{font-family:var(--sans)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.attr-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.attr-row .alab{width:150px;font-size:12.5px;text-align:right;color:var(--ink)}
+.attr-row .abar{flex:1;position:relative;height:20px}
+.attr-row .aval{width:105px;font:500 12.5px var(--mono)}
+.reg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper);width:fit-content;margin-bottom:10px}
+.reg button{border:0;background:transparent;padding:6px 12px;font:500 12.5px var(--sans);color:var(--muted);cursor:pointer}
+.reg button.on{background:var(--ink);color:#fff}
+#commentary p{margin-bottom:9px;font-size:13.5px;line-height:1.55}
+#commentary .figs{font-family:var(--mono);font-size:12.5px}
+.audit-strip{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 6px}
+.tick{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font:600 13px var(--sans);color:#fff;cursor:default;position:relative}
+.tick.ok{background:var(--ok)} .tick.fail{background:var(--bad)}
+.tick .tip{display:none;position:absolute;bottom:32px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:7px 10px;border-radius:7px;font:400 11.5px var(--sans);white-space:nowrap;z-index:5}
+.tick:hover .tip{display:block}
+.mut{color:var(--muted)}
+.foot{color:var(--muted);font-size:11.5px;margin-top:16px;line-height:1.6}
+#data-missing{display:none;background:#FBECEC;border:1px solid var(--bad);border-radius:12px;padding:16px 18px;margin-bottom:18px;font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="data-missing"><strong>Data file not found.</strong> This tool expects <code>fte_data.js</code> in the same folder, generated by the workbook export macro (ExportLeverLabData). Run the export from the FTE model and keep both files together.</div>
+<header>
+  <div>
+    <h1>Staff Cost Lever Lab</h1>
+    <div class="sub" id="subline"></div>
+  </div>
+  <div><button class="btn" id="reset">Reset to active assumptions</button></div>
+</header>
+
+<div class="grid">
+  <div>
+    <div class="panel grp-ours" style="margin-bottom:16px">
+      <h2>Our levers</h2>
+      <span class="tag ours">Discretionary</span>
+      <div id="ours-levers"></div>
+      <div class="lever">
+        <div class="lever-head"><label>Car allowance blocks</label><span class="note">annual £ per person, FTE and date prorated</span></div>
+        <div class="ca-grid" id="ca-grid"></div>
+      </div>
+    </div>
+    <div class="panel grp-com" style="margin-bottom:16px">
+      <h2>Committed terms</h2>
+      <span class="tag com">Changeable only by scheme review</span>
+      <div id="com-levers"></div>
+    </div>
+    <div class="panel grp-ext">
+      <h2>External shocks</h2>
+      <span class="tag ext">Outside our control</span>
+      <div id="ext-levers"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cards" id="cards"></div>
+    <div class="panel" style="margin-bottom:16px">
+      <h2>Cost build-up by year</h2>
+      <div class="sub">Baseline marks show total staff cost at active assumptions</div>
+      <div id="chart"></div>
+      <div class="legend">
+        <span><i style="background:var(--seg-basic)"></i>Basic</span>
+        <span><i style="background:var(--seg-bonus)"></i>Bonus</span>
+        <span><i style="background:var(--seg-pen)"></i>Pension</span>
+        <span><i style="background:var(--seg-ni)"></i>NI</span>
+        <span><i style="background:var(--seg-ca)"></i>Car allowance</span>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:16px">
+      <h2>What moved it</h2>
+      <div class="sub">Three-year impact of each lever vs active assumptions</div>
+      <div id="attr" style="margin-top:12px"></div>
+    </div>
+    <div class="panel" style="margin-bottom:16px">
+      <h2>Commentary</h2>
+      <div class="sub" style="margin-bottom:8px">Assembled by rules from the live figures; no generated text</div>
+      <div class="reg" role="group" aria-label="Commentary register">
+        <button id="reg-cs" class="on">C-suite</button>
+        <button id="reg-bh">Budget holder</button>
+      </div>
+      <div id="commentary"></div>
+    </div>
+    <div class="panel">
+      <h2>Validation against the workbook</h2>
+      <div class="sub">Engine at active assumptions vs Excel's own cached totals · tolerance £1</div>
+      <div class="audit-strip" id="audit"></div>
+      <div id="audit-summary" style="font-size:12.5px"></div>
+      <div class="foot" id="align-note"></div>
+    </div>
+    <div class="foot" id="engine-note"></div>
+  </div>
+</div>
+</div>
+
+<script src="fte_data.js"></script>
+<script>
+if (typeof FTE_DATA === "undefined") {
+  document.getElementById("data-missing").style.display = "block";
+} else {
+(function(){
+const D = FTE_DATA;
+const EMP = D.emps, EXCEL = D.excel, YEARS = D.years, BASE = D.base;
+const CA_TIERS = D.caTiers;
+
+let state = null, register = "cs";
+function freshState(){
+  return { pay:[...BASE.pay], bonus:[...BASE.bonus], dc:[...BASE.dc], db:[...BASE.db], ni:[...BASE.ni],
+           caUp:[...BASE.caUp], caTier:Object.fromEntries(CA_TIERS.map(t=>[t.id,t.base])) };
+}
+state = freshState();
+
+function monthEnds(by){
+  const out=[]; let y=D.by1StartYear+(by-1), m=4;
+  for(let i=0;i<12;i++){
+    const last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    out.push(`${y}-${String(m).padStart(2,"0")}-${String(last).padStart(2,"0")}`);
+    m++; if(m===13){y++;m=1;}
+  }
+  return out;
+}
+const ME = [monthEnds(1), monthEnds(2), monthEnds(3)];
+
+// Single engine, verified against the workbook: CA prorated by monthly FTE presence,
+// NI on basic + bonus + CA at each year's own rate.
+function run(lv){
+  const res=[];
+  for(let by=1; by<=3; by++){
+    const mes = ME[by-1];
+    const p=[lv.pay[0]/100, lv.pay[1]/100, lv.pay[2]/100];
+    const bonusR = lv.bonus[by-1]/100, dcR = lv.dc[by-1]/100, dbR = lv.db[by-1]/100, niR = lv.ni[by-1]/100;
+    const u=[lv.caUp[0]/100, lv.caUp[1]/100, lv.caUp[2]/100];
+    const t = {fte:0, basic:0, bonus:0, dc:0, db:0, ca:0, ni:0};
+    for(const e of EMP){
+      const W = e.s*(1+p[0]), Y = W*(1+p[1]), Z = Y*(1+p[2]);
+      const sal = by===1?W:(by===2?Y:Z);
+      const cbase = e.t ? lv.caTier[e.t] : 0;
+      const annual = [cbase*(1+u[0]), cbase*(1+u[0])*(1+u[1]), cbase*(1+u[0])*(1+u[1])*(1+u[2])][by-1];
+      const caMonth = Math.round(annual/12*100)/100;
+      for(let i=0;i<12;i++){
+        const me = mes[i];
+        const pres = ((!e.j || e.j<=me) && (!e.k || e.k>=me)) ? e.f : 0;
+        const basic = Math.abs(pres*sal)/12;
+        const bon = basic*e.u*bonusR;
+        const cav = caMonth*pres;
+        t.fte+=pres; t.basic+=basic; t.bonus+=bon;
+        t.dc += e.p==="DC" ? basic*dcR : 0;
+        t.db += e.p==="DB" ? basic*dbR : 0;
+        t.ca += cav;
+        t.ni += (basic+bon+cav)*niR;
+      }
+    }
+    t.salpp = t.basic+t.bonus+t.dc+t.db+t.ca+t.ni;
+    res.push(t);
+  }
+  return res;
+}
+const total3 = r => r[0].salpp+r[1].salpp+r[2].salpp;
+const BASERUN = run(freshState());
+
+const gbp = v => "£"+Math.round(v).toLocaleString("en-GB");
+const gbpS = v => (v>=0?"+":"−")+"£"+Math.abs(Math.round(v)).toLocaleString("en-GB");
+const pct1 = v => (v>=0?"+":"−")+Math.abs(v*100).toFixed(1)+"%";
+
+const LEVERS = [
+  {key:"pay", label:"Pay award", unit:"%", min:0, max:8, step:0.25, home:"ours", note:"compounds through later years"},
+  {key:"bonus", label:"Bonus assumption", unit:"%", min:0, max:150, step:5, home:"ours", note:"share of full bonus paid"},
+  {key:"caUp", label:"CA uplift", unit:"%", min:0, max:8, step:0.5, home:"ours", note:"review-cycle increase, compounds"},
+  {key:"dc", label:"DC employer rate", unit:"%", min:0, max:15, step:0.5, home:"com", note:"contractual; movable via consultation, not in-year"},
+  {key:"ni", label:"Employer NI rate", unit:"%", min:10, max:20, step:0.25, home:"ext", note:"flat rate on basic + bonus + CA"},
+  {key:"db", label:"DB contribution rate", unit:"%", min:10, max:25, step:0.5, home:"ext", note:"set by scheme actuary"}
+];
+const HOST = {ours:"ours-levers", com:"com-levers", ext:"ext-levers"};
+
+function buildLevers(){
+  for(const lv of LEVERS){
+    const div = document.createElement("div");
+    div.className = "lever";
+    let inner = `<div class="lever-head"><label>${lv.label}</label><span class="note">${lv.note}</span></div><div class="yrrow">`;
+    for(let y=0;y<3;y++){
+      inner += `<div class="yr"><div class="ylab">${YEARS[y]}</div>
+        <div class="val" id="v-${lv.key}-${y}">${state[lv.key][y]}${lv.unit}</div>
+        <input type="range" min="${lv.min}" max="${lv.max}" step="${lv.step}" value="${state[lv.key][y]}"
+          id="s-${lv.key}-${y}" aria-label="${lv.label} ${YEARS[y]}"></div>`;
+    }
+    inner += "</div>";
+    div.innerHTML = inner;
+    document.getElementById(HOST[lv.home]).appendChild(div);
+    for(let y=0;y<3;y++){
+      document.getElementById(`s-${lv.key}-${y}`).addEventListener("input", ev=>{
+        state[lv.key][y] = parseFloat(ev.target.value);
+        render();
+      });
+    }
+  }
+  const caHost = document.getElementById("ca-grid");
+  for(const t of CA_TIERS){
+    const n = EMP.filter(e=>e.t===t.id).length;
+    const cell = document.createElement("div");
+    cell.className = "ca-cell";
+    cell.innerHTML = `<div class="glab">${t.label}</div><div class="gnote">${n} people · baseline £${t.base.toLocaleString("en-GB")}</div>
+      <input type="number" min="0" max="20000" step="100" value="${t.base}" id="ca-${t.id}" aria-label="Car allowance ${t.label}">
+      <div class="ca-eff" id="caeff-${t.id}"></div>`;
+    caHost.appendChild(cell);
+    cell.querySelector("input").addEventListener("input", ev=>{
+      state.caTier[t.id] = parseFloat(ev.target.value)||0;
+      render();
+    });
+  }
+}
+
+function effAnnuals(baseVal){
+  const u = state.caUp.map(v=>v/100);
+  return [baseVal*(1+u[0]), baseVal*(1+u[0])*(1+u[1]), baseVal*(1+u[0])*(1+u[1])*(1+u[2])];
+}
+
+function leverChanges(){
+  const out=[];
+  for(const lv of LEVERS){
+    for(let y=0;y<3;y++){
+      if(state[lv.key][y] !== BASE[lv.key][y])
+        out.push({label:lv.label, year:YEARS[y], from:BASE[lv.key][y], to:state[lv.key][y], unit:lv.unit, home:lv.home});
+    }
+  }
+  for(const t of CA_TIERS){
+    if(state.caTier[t.id] !== t.base)
+      out.push({label:"CA "+t.label, year:"all years", from:t.base, to:state.caTier[t.id], unit:" £", home:"ours"});
+  }
+  return out;
+}
+
+const FAMILIES = [
+  {key:"pay", label:"Pay award", home:"ours"},
+  {key:"bonus", label:"Bonus assumption", home:"ours"},
+  {key:"ca", label:"Car allowance", home:"ours"},
+  {key:"dc", label:"DC employer rate", home:"com"},
+  {key:"ni", label:"Employer NI", home:"ext"},
+  {key:"db", label:"DB contribution", home:"ext"}
+];
+function attribution(cur){
+  const curT = total3(cur), baseT = total3(BASERUN);
+  const rows=[];
+  for(const f of FAMILIES){
+    const test = JSON.parse(JSON.stringify(state));
+    if(f.key==="ca"){
+      CA_TIERS.forEach(t=>test.caTier[t.id]=t.base);
+      test.caUp=[...BASE.caUp];
+    } else { test[f.key]=[...BASE[f.key]]; }
+    rows.push({...f, d: curT - total3(run(test))});
+  }
+  const interaction = (curT-baseT) - rows.reduce((a,r)=>a+r.d,0);
+  return {rows, interaction, curT, baseT};
+}
+
+function render(){
+  const cur = run(state);
+  for(const lv of LEVERS){
+    for(let y=0;y<3;y++){
+      const el = document.getElementById(`v-${lv.key}-${y}`);
+      el.textContent = state[lv.key][y]+lv.unit;
+      el.classList.toggle("changed", state[lv.key][y] !== BASE[lv.key][y]);
+    }
+  }
+  for(const t of CA_TIERS){
+    const eff = effAnnuals(state.caTier[t.id]);
+    document.getElementById(`caeff-${t.id}`).textContent =
+      "effective: " + eff.map(v=>"£"+Math.round(v).toLocaleString("en-GB")).join(" / ");
+  }
+  const cards = document.getElementById("cards");
+  cards.innerHTML = "";
+  for(let y=0;y<3;y++){
+    const d = cur[y].salpp - BASERUN[y].salpp;
+    const cls = Math.abs(d)<1 ? "flat" : (d>0?"up":"down");
+    const dTxt = Math.abs(d)<1 ? "at baseline" : `${gbpS(d)} · ${pct1(d/BASERUN[y].salpp)}`;
+    cards.insertAdjacentHTML("beforeend", `<div class="card">
+      <div class="yl">${YEARS[y]} · Sal++</div>
+      <div class="big">${gbp(cur[y].salpp)}</div>
+      <div class="delta ${cls}">${dTxt}</div>
+      <div class="fte">${(cur[y].fte/12).toFixed(1)} average FTE</div>
+    </div>`);
+  }
+  drawChart(cur);
+  const at = attribution(cur);
+  drawAttribution(at);
+  drawCommentary(cur, at);
+}
+
+function drawChart(cur){
+  const W=760, H=250, padL=70, padB=26, padT=14;
+  const maxV = Math.max(...cur.map(r=>r.salpp), ...BASERUN.map(r=>r.salpp))*1.08;
+  const bw=110, gap=(W-padL-3*bw)/3.6;
+  const segs=[["basic","--seg-basic"],["bonus","--seg-bonus"],["pen","--seg-pen"],["ni","--seg-ni"],["ca","--seg-ca"]];
+  const css = k => getComputedStyle(document.documentElement).getPropertyValue(k);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Stacked cost by year" style="width:100%;height:auto">`;
+  for(let i=0;i<=4;i++){
+    const v=maxV*i/4, y=H-padB-(H-padB-padT)*i/4;
+    s+=`<line x1="${padL}" y1="${y}" x2="${W-8}" y2="${y}" stroke="${css('--line')}" stroke-width="1"/>
+        <text x="${padL-6}" y="${y+4}" text-anchor="end" font-size="10.5" fill="${css('--muted')}">£${(v/1e6).toFixed(1)}m</text>`;
+  }
+  for(let y=0;y<3;y++){
+    const x = padL+gap*0.5+y*(bw+gap);
+    let acc=0;
+    const parts = {basic:cur[y].basic, bonus:cur[y].bonus, pen:cur[y].dc+cur[y].db, ni:cur[y].ni, ca:cur[y].ca};
+    for(const [k,varn] of segs){
+      const v=parts[k]; if(v<=0) continue;
+      const h=(H-padB-padT)*v/maxV, yTop=H-padB-((H-padB-padT)*acc/maxV)-h;
+      s+=`<rect x="${x}" y="${yTop}" width="${bw}" height="${h}" fill="${css(varn)}" rx="2"><title>${k}: ${gbp(v)}</title></rect>`;
+      acc+=v;
+    }
+    const by=H-padB-(H-padB-padT)*BASERUN[y].salpp/maxV;
+    s+=`<line x1="${x-7}" y1="${by}" x2="${x+bw+7}" y2="${by}" stroke="${css('--ink')}" stroke-width="1.6" stroke-dasharray="4 3"><title>baseline ${gbp(BASERUN[y].salpp)}</title></line>`;
+    s+=`<text x="${x+bw/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="${css('--ink')}">${YEARS[y]}</text>`;
+  }
+  s+="</svg>";
+  document.getElementById("chart").innerHTML = s;
+}
+
+function drawAttribution(at){
+  const {rows, interaction, curT, baseT} = at;
+  const maxAbs = Math.max(1, ...rows.map(r=>Math.abs(r.d)), Math.abs(interaction));
+  const css = k => getComputedStyle(document.documentElement).getPropertyValue(k);
+  const colour = h => h==="ours"?css('--ours'):(h==="com"?css('--com'):css('--ext'));
+  const bar = (d, col)=>{
+    const half=50, w=Math.abs(d)/maxAbs*half;
+    const x=d>=0?half:half-w;
+    return `<svg viewBox="0 0 100 20" preserveAspectRatio="none" style="width:100%;height:20px">
+      <line x1="50" y1="0" x2="50" y2="20" stroke="${css('--line')}"/>
+      <rect x="${x}" y="4" width="${Math.max(w,0.4)}" height="12" rx="2" fill="${col}"/></svg>`;
+  };
+  let html="";
+  for(const r of rows){
+    html+=`<div class="attr-row"><div class="alab">${r.label}</div>
+      <div class="abar">${bar(r.d, colour(r.home))}</div>
+      <div class="aval">${Math.abs(r.d)<1?'<span class="mut">—</span>':gbpS(r.d)}</div></div>`;
+  }
+  html+=`<div class="attr-row"><div class="alab mut">Interaction effects</div>
+    <div class="abar">${bar(interaction, css('--muted'))}</div>
+    <div class="aval mut">${Math.abs(interaction)<1?"—":gbpS(interaction)}</div></div>`;
+  html+=`<div class="attr-row" style="border-top:1px solid var(--line);padding-top:7px"><div class="alab" style="font-weight:600">Total vs baseline</div>
+    <div class="abar"></div><div class="aval" style="font-weight:600">${Math.abs(curT-baseT)<1?"—":gbpS(curT-baseT)}</div></div>`;
+  document.getElementById("attr").innerHTML = html;
+}
+
+// Deterministic commentary: rule-based assembly from the computed figures only.
+function drawCommentary(cur, at){
+  const el = document.getElementById("commentary");
+  const {rows, interaction, curT, baseT} = at;
+  const delta = curT - baseT;
+  const changes = leverChanges();
+  const sumBy = h => rows.filter(r=>r.home===h).reduce((a,r)=>a+r.d,0);
+  const oursD = sumBy("ours"), comD = sumBy("com"), extD = sumBy("ext");
+  const driver = rows.reduce((a,b)=>Math.abs(b.d)>Math.abs(a.d)?b:a, {d:0});
+  const homeName = {ours:"a discretionary lever", com:"a committed term", ext:"an external factor"};
+
+  if(register==="cs"){
+    let p1 = `<p>Three-year staff cost is <span class="figs">${gbp(curT)}</span> `+
+             `(${YEARS[0]} ${gbp(cur[0].salpp)}, ${YEARS[1]} ${gbp(cur[1].salpp)}, ${YEARS[2]} ${gbp(cur[2].salpp)}).`;
+    if(Math.abs(delta)<1){
+      p1 += ` All levers are at active assumptions; figures match the budget baseline.</p>`;
+      el.innerHTML = p1;
+      return;
+    }
+    p1 += ` That is <span class="figs">${gbpS(delta)}</span> (${pct1(delta/baseT)}) against the budget baseline.</p>`;
+    let p2 = `<p>The largest driver is <strong>${driver.label}</strong> at <span class="figs">${gbpS(driver.d)}</span>, ${homeName[driver.home]}.`;
+    const bits=[];
+    if(Math.abs(oursD)>=1) bits.push(`discretionary levers ${gbpS(oursD)}`);
+    if(Math.abs(comD)>=1) bits.push(`committed terms ${gbpS(comD)}`);
+    if(Math.abs(extD)>=1) bits.push(`external factors ${gbpS(extD)}`);
+    if(bits.length>1) p2 += ` In total: ${bits.join(", ")}.`;
+    if(Math.abs(interaction)>=1) p2 += ` Interaction effects contribute ${gbpS(interaction)}.`;
+    p2 += `</p>`;
+    let p3 = "";
+    if(Math.abs(extD)>=1 && Math.abs(oursD)>=1 && Math.sign(extD)!==Math.sign(oursD)){
+      p3 = `<p>Discretionary changes ${oursD<0?"offset":"add to"} the external movement by ${gbpS(Math.abs(oursD)*Math.sign(oursD))} over the three years.</p>`;
+    } else if(Math.abs(extD)>=1 && Math.abs(oursD)<1 && Math.abs(comD)<1){
+      p3 = `<p>The movement is wholly outside management control at current lever settings.</p>`;
+    }
+    el.innerHTML = p1+p2+p3;
+  } else {
+    let html = "";
+    for(let y=0;y<3;y++){
+      const d = cur[y].salpp - BASERUN[y].salpp;
+      html += `<p><strong>${YEARS[y]}:</strong> <span class="figs">${gbp(cur[y].salpp)}</span>`+
+              (Math.abs(d)<1 ? ` , at budget baseline.` : ` , <span class="figs">${gbpS(d)}</span> vs baseline.`)+`</p>`;
+    }
+    if(changes.length===0){
+      html += `<p>No assumptions changed; the model reflects the approved budget basis.</p>`;
+    } else {
+      html += `<p>Assumptions changed from the approved basis:</p>`;
+      for(const c of changes){
+        html += `<p class="figs" style="margin-left:12px">· ${c.label}, ${c.year}: ${c.from}${c.unit} → ${c.to}${c.unit}</p>`;
+      }
+      html += `<p>Where these affect your cost centre, the movement flows through basic pay, on-costs (employer NI and pension) and car allowance in proportion to the staff affected.</p>`;
+    }
+    el.innerHTML = html;
+  }
+}
+
+function buildValidation(){
+  const strip = document.getElementById("audit");
+  const measures=[["fte","FTE"],["basic","Basic"],["bonus","Bonus"],["dc","DC"],["db","DB"],["ca","CA"],["ni","NI"],["salpp","Sal++"]];
+  let pass=0, total=0;
+  for(let y=0;y<3;y++){
+    for(const [k,lab] of measures){
+      const mine=BASERUN[y][k], tgt=EXCEL[y][k];
+      const money = k!=="fte";
+      const ok = Math.abs(mine-tgt) < (money?1:0.05);
+      total++; if(ok) pass++;
+      const fmt = v => money?gbp(v):v.toFixed(1);
+      strip.insertAdjacentHTML("beforeend",
+        `<div class="tick ${ok?"ok":"fail"}">${ok?"✓":"✗"}
+          <span class="tip">${lab} ${YEARS[y]} · engine ${fmt(mine)} · Excel ${fmt(tgt)}</span></div>`);
+    }
+  }
+  document.getElementById("audit-summary").innerHTML =
+    `<strong>${pass} of ${total}</strong> figures reconcile with the workbook's cached values within £1. `+
+    `Hover any tick for the pair of figures. Red crosses after a workbook update mean its logic has changed relative to this engine; investigate before trusting either.`;
+  document.getElementById("align-note").textContent =
+    "Engine and workbook logic are aligned as at the export date shown above; no known differences. "+
+    "Car allowance is prorated by monthly FTE presence and feeds the NI base, matching the model.";
+}
+
+document.getElementById("reg-cs").addEventListener("click", ()=>{setReg("cs")});
+document.getElementById("reg-bh").addEventListener("click", ()=>{setReg("bh")});
+function setReg(r){
+  register=r;
+  document.getElementById("reg-cs").classList.toggle("on", r==="cs");
+  document.getElementById("reg-bh").classList.toggle("on", r==="bh");
+  render();
+}
+document.getElementById("reset").addEventListener("click", ()=>{
+  state = freshState();
+  for(const lv of LEVERS) for(let y=0;y<3;y++)
+    document.getElementById(`s-${lv.key}-${y}`).value = BASE[lv.key][y];
+  for(const t of CA_TIERS) document.getElementById(`ca-${t.id}`).value = t.base;
+  render();
+});
+
+document.getElementById("subline").textContent =
+  `${D.modelName} · ${EMP.length} employees · ${YEARS[0]} to ${YEARS[2]} · data exported ${D.exported}`;
+document.getElementById("engine-note").textContent =
+  "Self-contained decision tool · dummy dataset · no external data connections. Engine mirrors the workbook: monthly presence from start and end dates × FTE, basic = FTE × uplifted salary ÷ 12, bonus = basic × grade rate × bonus assumption, DC and DB on basic by pension type, car allowance as annual blocks by role tier prorated by monthly FTE presence, NI applied to basic + bonus + CA. Pay award and CA uplift compound year on year. Commentary is rule-based text assembled from the computed figures. Figures are indicative modelling, not payroll calculations.";
+
+buildLevers();
+buildValidation();
+render();
+})();
+}
+</script>
+</body>
+</html>

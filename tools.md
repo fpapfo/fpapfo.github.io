@@ -45,7 +45,7 @@ Explore the financial impact of recruitment, vacancies, salary changes and staff
 To demonstrate how existing finance models can become interactive decision-support tools.
 
 <p>
-  <a href="../assets/tools/lever_lab.html" target="_blank" rel="noopener noreferrer">
+  <a href="../assets/tools/fte-decision-lab_lab.html" target="_blank" rel="noopener noreferrer">
     Open the FTE Budget Simulator
   </a>
   <span aria-hidden="true">↗</span>

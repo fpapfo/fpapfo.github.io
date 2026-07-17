@@ -29,7 +29,7 @@ Explore scenarios and understand the impact of assumptions on cash flow.
 ### FTE Budget Simulator
 
 **Purpose:**
-Explore the financial impact of recruitment, vacancies, salary changes and staffing decisions before committing to a budget.
+Explore the financial impact of staffing costs before committing to a budget.
 
 **Audience:**
 - FP&A

@@ -38,7 +38,8 @@ Explore the financial impact of recruitment, vacancies, salary changes and staff
 
 **Built with**
 * FTE Budget Model (my own)
-* HTML & JavaScript
+* HTML (with JavaScript)
+* VBA Macro to convert the data from my model into the js file for the HTML.
 
 **Why I built it**
 To demonstrate how existing finance models can become interactive decision-support tools.

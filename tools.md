@@ -44,7 +44,7 @@ Demonstrates how a traditional Excel budgeting model can be transformed into an 
 
 <p>
   <a href="../assets/tools/fte-decision-lab.html" target="_blank" rel="noopener noreferrer">
-    Open the FTE Decision Lab in a new window
+    Open the FTE Decision Lab in a new tab
   </a>
   <span aria-hidden="true">↗</span>
 </p>

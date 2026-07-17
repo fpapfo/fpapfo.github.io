@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About
+title: Decision Tools
 permalink: /tools/
 ---
 

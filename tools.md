@@ -43,7 +43,7 @@ Explore the financial impact of staffing costs before committing to a budget.
 Demonstrates how a traditional Excel budgeting model can be transformed into an interactive decision-support tool by separating the calculation engine from the user interface.
 
 <p>
-  <a href="../assets/tools/fte-decision-lab_lab.html" target="_blank" rel="noopener noreferrer">
+  <a href="../assets/tools/fte-decision-lab.html" target="_blank" rel="noopener noreferrer">
     Open the FTE Decision Lab in a new window
   </a>
   <span aria-hidden="true">↗</span>

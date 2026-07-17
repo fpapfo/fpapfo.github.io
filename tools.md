@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-permalink: /about/
+permalink: /tools/
 ---
 
 
@@ -19,7 +19,7 @@ Explore scenarios and understand the impact of assumptions on cash flow.
 - Leadership
 
 <p>
-  <a href="assets/tools/ccc-simulator.html" target="_blank" rel="noopener noreferrer">
+  <a href="../assets/tools/ccc-simulator.html" target="_blank" rel="noopener noreferrer">
     Open the cash simulator in a new tab
   </a>
   <span aria-hidden="true">↗</span>
@@ -44,7 +44,7 @@ Explore the financial impact of recruitment, vacancies, salary changes and staff
 To demonstrate how existing finance models can become interactive decision-support tools.
 
 <p>
-  <a href="assets\tools\lever_lab.html" target="_blank" rel="noopener noreferrer">
+  <a href="../assets/tools/lever_lab.html" target="_blank" rel="noopener noreferrer">
     Open the FTE Budget Simulator
   </a>
   <span aria-hidden="true">↗</span>

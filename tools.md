@@ -16,6 +16,11 @@ Explore scenarios and understand the impact of assumptions on cash flow.
 - Treasury
 - Leadership
 
+<figure>
+  <img src="\assets\images\ccc-image.png" alt="Screenshot of the Cash Flow Simulator showing interactive scenario controls and projected cash flow outputs for different planning assumptions.">
+  <figcaption>Cash Conversion Cycle Simulator — Interactive scenario modelling tool for exploring the impact of changing assumptions on future cash flow and liquidity.</figcaption>
+</figure>
+
 <p>
   <a href="../assets/tools/ccc-simulator.html" target="_blank" rel="noopener noreferrer">
     Open the cash simulator in a new tab
@@ -41,6 +46,11 @@ Explore the financial impact of staffing costs before committing to a budget.
 
 **Why I built it**
 Demonstrates how a traditional Excel budgeting model can be transformed into an interactive decision-support tool by separating the calculation engine from the user interface.
+
+<figure>
+  <img src="\assets\images\fte-decision-lab-image.png" alt="Screenshot of the Staff Cost Lever Lab showing interactive staffing and cost assumption controls, summary metrics, cost visualisations, commentary and validation against the source model.">
+  <figcaption>Interactive decision-support tool built from an FTE budget model, allowing finance teams to explore the impact of staffing assumptions, employer costs and external changes.</figcaption>
+</figure>
 
 <p>
   <a href="../assets/tools/fte-decision-lab.html" target="_blank" rel="noopener noreferrer">

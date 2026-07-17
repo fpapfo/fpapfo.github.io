@@ -8,6 +8,7 @@ email: hello@dgrhm.com
 
 header_pages:
   - about.md
+  - tools.md
 
 minima:
   social_links:

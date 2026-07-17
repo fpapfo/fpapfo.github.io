@@ -42,11 +42,11 @@ Explore the financial impact of staffing costs before committing to a budget.
 * VBA Macro to convert the data from my model into the js file for the HTML.
 
 **Why I built it**
-To demonstrate how existing finance models can become interactive decision-support tools.
+Demonstrates how a traditional Excel budgeting model can be transformed into an interactive decision-support tool by separating the calculation engine from the user interface.
 
 <p>
   <a href="../assets/tools/fte-decision-lab_lab.html" target="_blank" rel="noopener noreferrer">
-    Open the FTE Budget Simulator
+    Open the FTE Decision Lab in a new window
   </a>
   <span aria-hidden="true">↗</span>
 </p>

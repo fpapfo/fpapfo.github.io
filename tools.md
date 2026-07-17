@@ -5,6 +5,12 @@ permalink: /tools/
 ---
 
 
+* [WCash Flow Simulator](#cash-flow-simulator)
+* [WFTE Budget Simulator](#fte-budget-simulator)
+
+
+---
+
 
 ### Cash Flow Simulator
 

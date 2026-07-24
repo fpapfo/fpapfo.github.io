@@ -8,7 +8,7 @@ permalink: /workshop/
 A look behind the scenes at workflows and decision-support tools currently under development. This is where I document ideas, prototypes and lessons learned as they evolve.
 
 
-### FTE Decision Support Workflow 
+### staff costs & FTE Budget Workflow 
 
 **Goal**
 

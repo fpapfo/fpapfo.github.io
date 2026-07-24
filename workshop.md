@@ -48,14 +48,24 @@ build_csuite.py (the C-suite tool) and build_board.py (the board pack).
 
 The three-stage story
 
-| ANALYSE ─────────────►  | DECIDE ──────────►  | GOVERN | 
+| ANALYSE ───────►  | DECIDE ───────►  | GOVERN | 
 |----------|----------|----------|
 | (C-suite tool) |         (C-suite HITL)|     (Board pack) |
 | full disclosure |        pick scenario |      curated, locked |
 
-Analyse — csuite-tool.html: how did we do (−8.62%), where we're heading (standstill waterfall + pay-award lever), departments drill-down, scenarios, concerns & flags. C-suite see everything.
-Decide — the human checkpoint. C-suite lock the pay award and the candidate roles.
-Govern — board-pack.html: same numbers, board-framed, function-level, locked to the decision.
+1) Analyse — csuite-tool.html:
+     - how did we do (−8.62%), 
+     - where we're heading (standstill waterfall + pay-award lever), 
+     - departments drill-down, 
+     - scenarios, 
+     - concerns & flags. 
+     - C-suite see everything.
+2) Decide — the human checkpoint. C-suite lock the pay award and the candidate roles.
+3) Govern — board-pack.html: 
+    - same numbers, 
+    - board-framed, 
+    - function-level, 
+    - locked to the decision.
 
 **What runs it**
 

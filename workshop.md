@@ -54,26 +54,30 @@ The three-stage story
 | full disclosure |        pick scenario |      curated, locked |
 
 1) Analyse — csuite-tool.html:
-     - how did we do (−8.62%), 
-     - where we're heading (standstill waterfall + pay-award lever), 
-     - departments drill-down, 
-     - scenarios, 
-     - concerns & flags. 
-     - C-suite see everything.
+ - how did we do (−8.62%), 
+ - where we're heading (standstill waterfall + pay-award lever), 
+ - departments drill-down, 
+ - scenarios, 
+ - concerns & flags. 
+ - C-suite see everything.
 
 2) Decide — the human checkpoint. C-suite lock the pay award and the candidate roles.
 
 3) Govern — board-pack.html: 
-    - same numbers, 
-    - board-framed, 
-    - function-level, 
-    - locked to the decision.
+ - same numbers, 
+ - board-framed, 
+ - function-level, 
+ - locked to the decision.
 
 **What runs it**
 
-/run-workflow — the orchestrator that chains the stages, with a learn-mode toggle. Learn mode on → fp-coach teaches at each step (What / Why / The idea / Watch for / Your turn), grounded in your real numbers.
+/run-workflow — the orchestrator that chains the stages, with a learn-mode toggle. 
+
+Learn mode on → fp-coach teaches at each step (What / Why / The idea / Watch for / Your turn), grounded in your real numbers.
+
 The board-presentation skill pack underneath: input-fte-model, fp-data-check, variance-analysis, mgmt-report, fin-storytelling, board-deck, viz-design, html-slides, exec-summary, fp-coach.
 The through-line
+
 One reconciled dataset, many views. Every output — c-suite tool, board pack, exec summary — renders from the same tied-back numbers. Change the workbook, re-run the pipeline, everything refreshes and nothing can silently disagree. That's what the reconciliation gate and the engine-parity check protect.
 
 

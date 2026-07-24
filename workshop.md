@@ -60,7 +60,9 @@ The three-stage story
      - scenarios, 
      - concerns & flags. 
      - C-suite see everything.
+
 2) Decide — the human checkpoint. C-suite lock the pay award and the candidate roles.
+
 3) Govern — board-pack.html: 
     - same numbers, 
     - board-framed, 

@@ -54,11 +54,11 @@ The three-stage story
 | full disclosure |        pick scenario |      curated, locked |
 
 1) Analyse — csuite-tool.html:
- - how did we do (−8.62%), 
- - where we're heading (standstill waterfall + pay-award lever), 
- - departments drill-down, 
- - scenarios, 
- - concerns & flags. 
+ - how did we do (−8.62%),
+ - where we're heading (standstill waterfall + pay-award lever),
+ - departments drill-down,
+ - scenarios,
+ - concerns & flags.
  - C-suite see everything.
 
 2) Decide — the human checkpoint. C-suite lock the pay award and the candidate roles.

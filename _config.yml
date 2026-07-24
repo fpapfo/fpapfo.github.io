@@ -7,9 +7,9 @@ title: "Donna Graham FP&A"
 email: hello@dgrhm.com
 
 header_pages:
-  - about.md
-  - tools.md
   - workshop.md
+  - tools.md
+  - about.md  
 
 minima:
   social_links:

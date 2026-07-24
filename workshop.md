@@ -103,7 +103,7 @@ The skill carries a table of the concepts this workflow throws up, each with its
 
 **What I've seen it do so far**
 
-I ran this workflow with teaching moment live, on my real numbers. Claude posed the current-year underspend and asked whether an underspend is good news and what drove it. I predicted various drivers - pension take-up, part-timers, vacancy gaps, bonus then the reveal scored each explaining the variance and whether it was a real feature or the main driver. 
+I ran this workflow with teaching moment live, on my real numbers. Claude posed the current-year underspend and asked whether an underspend is good news and what drove it. I explained the various drivers - pension take-up, part-timers, vacancy gaps, underpaid bonus, then the reveal scored each explaining the variance and whether it was a real feature or the main driver. 
 
 **State**
 The skill is written and wired, and we've proven the format works on one moment. What it has not done yet is run end to end through a full workflow with learn mode on from start to finish. That is the natural next test once the other pieces settle.

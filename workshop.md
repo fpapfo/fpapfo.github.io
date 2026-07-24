@@ -8,7 +8,7 @@ permalink: /workshop/
 A look behind the scenes at workflows and decision-support tools currently under development. This is where I document ideas, prototypes and lessons learned as they evolve.
 
 
-## FTE Decision Support Workflow 
+### FTE Decision Support Workflow 
 
 **Goal**
 
@@ -27,8 +27,10 @@ Turn an existing model (in this case my staff costs & FTE budget model) into a f
 * Outputs undergoing design and testing (to be added here over next few days)
 
 
-### The two-sided flow
+#### The two-sided flow
+
 **Side 1 — the model (mine, in Excel)**
+
 staff costs & FTE budget model.xlsx → the single source of truth. Establishment, actuals/forecast, current budget, three budget years, candidate scenarios. Everything downstream reads from it and reconciles back to it.
 
 **Side 2 — the pipeline (mine, in Python) — five scripts, run in order:**
@@ -41,11 +43,12 @@ staff costs & FTE budget model.xlsx → the single source of truth. Establishmen
   | 4  | 	verify_engine.py   | 	Proves the JS engine reproduces every cell   | 
   | 5  | 	analyse.py   | 	Outturn, variance, bridge, by department/band   | 
 
-Then the presentation builders: build_csuite.py (the C-suite tool) and build_board.py (the board pack).
+Then the presentation builders:
+build_csuite.py (the C-suite tool) and build_board.py (the board pack).
 
 The three-stage story
 
-| ANALYSE ─────────────▶ | DECIDE ──────────▶ | GOVERN |
+| ANALYSE ─────────────►  | DECIDE ──────────►  | GOVERN | 
 |----------|----------|----------|
 | (C-suite tool) |         (C-suite HITL)|     (Board pack) |
 | full disclosure |        pick scenario |      curated, locked |
@@ -55,6 +58,7 @@ Decide — the human checkpoint. C-suite lock the pay award and the candidate ro
 Govern — board-pack.html: same numbers, board-framed, function-level, locked to the decision.
 
 **What runs it**
+
 /run-workflow — the orchestrator that chains the stages, with a learn-mode toggle. Learn mode on → fp-coach teaches at each step (What / Why / The idea / Watch for / Your turn), grounded in your real numbers.
 The board-presentation skill pack underneath: input-fte-model, fp-data-check, variance-analysis, mgmt-report, fin-storytelling, board-deck, viz-design, html-slides, exec-summary, fp-coach.
 The through-line

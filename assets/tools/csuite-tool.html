@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FTE Budget: C-suite Analysis & Decision Pack</title>
+<style>
+  :root{
+    color-scheme:light;
+    --surface-1:#fcfcfb; --plane:#f9f9f7;
+    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+    --s1:#2a78d6; --s2:#008300; --s3:#e87ba4; --s4:#eda100; --s5:#1baf7a; --s6:#eb6834;
+    --good:#0ca30c; --warn:#fab219; --crit:#d03b3b; --up:#006300;
+    --committed:#52514e; --control:#2a78d6; --r:11px;
+  }
+  @media (prefers-color-scheme:dark){:root:where(:not([data-theme=light])){
+    color-scheme:dark; --surface-1:#1a1a19; --plane:#0d0d0d;
+    --ink:#fff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --s1:#3987e5; --s3:#d55181; --s4:#c98500; --s5:#199e70; --s6:#d95926; --up:#0ca30c;
+    --committed:#a8a69c; --control:#3987e5;}}
+  :root[data-theme=dark]{
+    color-scheme:dark; --surface-1:#1a1a19; --plane:#0d0d0d;
+    --ink:#fff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --s1:#3987e5; --s3:#d55181; --s4:#c98500; --s5:#199e70; --s6:#d95926; --up:#0ca30c;
+    --committed:#a8a69c; --control:#3987e5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--plane);color:var(--ink);
+    font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1320px;margin:0 auto;padding:22px 20px 80px}
+  header{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;justify-content:space-between}
+  h1{font-size:21px;margin:0;letter-spacing:-.01em}
+  .by{font-size:12px;color:var(--muted);margin-top:3px}
+  .badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;
+    padding:5px 11px;border-radius:999px;border:1px solid var(--border);background:var(--surface-1)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--good)}
+  .tabs{display:flex;gap:5px;margin:18px 0 20px;flex-wrap:wrap}
+  .tabs button{font:inherit;font-size:13.5px;font-weight:600;padding:8px 16px;border-radius:9px;cursor:pointer;
+    border:1px solid var(--border);background:var(--surface-1);color:var(--ink)}
+  .tabs button[aria-selected=true]{background:var(--s1);color:#fff;border-color:transparent}
+  section[hidden]{display:none}
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:26px 0 12px;font-weight:650}
+  h2:first-child{margin-top:0}
+  .card{background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:16px}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:8px}
+  .tile{background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+  .tile .l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+  .tile .v{font-size:26px;font-weight:660;letter-spacing:-.02em;margin-top:4px;line-height:1.05}
+  .tile .d{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+  .d.pos{color:var(--crit)} .d.neg{color:var(--up)}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .gl{stroke:var(--grid);stroke-width:1} .ax{stroke:var(--axis);stroke-width:1}
+  text{fill:var(--ink-2);font-size:11px}
+  text.t{fill:var(--muted);font-size:10.5px;font-variant-numeric:tabular-nums}
+  text.v{fill:var(--ink);font-size:11.5px;font-weight:650;font-variant-numeric:tabular-nums}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--ink-2);margin-top:8px}
+  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;font-variant-numeric:normal}
+  th{color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+  tfoot td{font-weight:650;border-top:2px solid var(--axis);border-bottom:none}
+  tr.hi td{background:color-mix(in srgb,var(--s4) 13%,transparent)}
+  .commentary{font-size:13.5px;color:var(--ink-2);line-height:1.6;max-width:74ch}
+  .commentary b{color:var(--ink)}
+  .lever{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:2px 0 6px}
+  .lever label{font-size:13px;font-weight:600}
+  .lever input[type=range]{flex:1;min-width:180px;accent-color:var(--control)}
+  .lever output{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px;min-width:56px;text-align:right;color:var(--control)}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .seg button{font:inherit;font-size:12px;font-weight:600;padding:5px 12px;border:0;cursor:pointer;
+    background:var(--surface-1);color:var(--ink-2);border-right:1px solid var(--border)}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed=true]{background:var(--s1);color:#fff}
+  .cols{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;align-items:start}
+  @media (max-width:960px){.cols{grid-template-columns:1fr}}
+  .grp{margin-bottom:14px}
+  .grp .gh{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:650;margin-bottom:7px}
+  .role{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;padding:6px 7px;border-radius:7px;font-size:12.5px}
+  .role:hover{background:var(--plane)}
+  .role .nm b{font-weight:550;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .role .nm span{color:var(--muted);font-size:10.5px}
+  .role .cost{font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--ink-2);text-align:right;white-space:nowrap}
+  .role.off .nm b,.role.off .cost{opacity:.4}
+  input[type=checkbox]{width:15px;height:15px;accent-color:var(--s1);cursor:pointer;margin:0}
+  .defer{display:flex;gap:5px;align-items:center;margin:1px 0 3px 30px;font-size:10.5px;color:var(--muted)}
+  .defer select{font:inherit;font-size:10.5px;padding:1px 4px;border-radius:5px;border:1px solid var(--border);background:var(--surface-1);color:var(--ink)}
+  button.mini{font:inherit;font-size:12px;font-weight:600;padding:5px 11px;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface-1);color:var(--ink)}
+  button.mini:hover{background:var(--plane)}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .flag{background:var(--surface-1);border:1px solid var(--border);border-left-width:3px;border-radius:0 10px 10px 0;padding:13px 16px;margin-bottom:11px}
+  .flag.watch{border-left-color:var(--warn)} .flag.info{border-left-color:var(--s1)}
+  .flag b{display:block;margin-bottom:4px;font-size:14px}
+  .flag p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.55;max-width:80ch}
+  .note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5;max-width:80ch}
+  .wf-head{display:flex;align-items:baseline;gap:12px;margin:4px 0 10px;flex-wrap:wrap}
+  .wf-head .big{font-size:24px;font-weight:680;letter-spacing:-.02em}
+  .wf-head .lab{font-size:13px;color:var(--ink-2)}
+  .badge-mini{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:650;border:1px solid var(--border)}
+  .dept-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .dept-pills .fnhead{width:100%;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:650;margin-top:8px}
+  .dept-pills button{font:inherit;font-size:12.5px;padding:5px 12px;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:var(--surface-1);color:var(--ink)}
+  .dept-pills button[aria-pressed=true]{background:var(--s1);color:#fff;border-color:transparent}
+  .stbadge{font-size:10px;font-weight:650;padding:1px 7px;border-radius:999px;white-space:nowrap}
+  .st-established{background:color-mix(in srgb,var(--muted) 18%,transparent);color:var(--ink-2)}
+  .st-joined{background:color-mix(in srgb,var(--s2) 20%,transparent);color:var(--up)}
+  .st-future{background:color-mix(in srgb,var(--s1) 18%,transparent);color:var(--s1)}
+  .st-leaving{background:color-mix(in srgb,var(--crit) 16%,transparent);color:var(--crit)}
+  .changeline{font-size:13px;color:var(--ink-2);padding:5px 0;border-bottom:1px solid var(--grid);line-height:1.5}
+  .changeline:last-child{border-bottom:0}
+  .tt{position:fixed;pointer-events:none;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.14);opacity:0;transition:opacity .1s;z-index:9;font-variant-numeric:tabular-nums}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>FTE Budget: C-suite Analysis &amp; Decision Pack</h1>
+      <div class="by" id="by"></div>
+    </div>
+    <span class="badge"><span class="dot" id="pdot"></span><span id="ptext">checking…</span></span>
+  </header>
+
+  <div class="tabs">
+    <button id="t-analysis" aria-selected="true">Analysis</button>
+    <button id="t-departments" aria-selected="false">Departments</button>
+    <button id="t-decision" aria-selected="false">Decision</button>
+    <button id="t-flags" aria-selected="false">Concerns &amp; flags</button>
+  </div>
+
+  <!-- ============ ANALYSIS ============ -->
+  <section id="s-analysis">
+    <h2>A · How did we do? &nbsp;2025/26 budget vs actual</h2>
+    <div class="tiles" id="retro-tiles"></div>
+    <div class="card">
+      <div id="retro-chart"></div>
+      <div class="legend">
+        <span><i style="background:var(--s1)"></i>Budget</span>
+        <span><i style="background:var(--s6)"></i>Actual</span>
+      </div>
+    </div>
+    <p class="commentary" id="retro-comment"></p>
+
+    <h2>B · Where are we heading? &nbsp;Outturn → Budget 2026/27</h2>
+    <div class="card">
+      <div class="lever">
+        <label for="pa">Pay award</label>
+        <input type="range" id="pa" min="0" max="0.06" step="0.005">
+        <output id="pa-out"></output>
+        <span class="seg" id="stops">
+          <button data-stop="outturn" aria-pressed="false">Outturn</button>
+          <button data-stop="standstill" aria-pressed="false">Standstill</button>
+          <button data-stop="budget" aria-pressed="true">Budget</button>
+        </span>
+      </div>
+      <div class="wf-head" id="wf-head"></div>
+      <div id="waterfall"></div>
+      <div class="legend">
+        <span><i style="background:var(--committed)"></i>Already committed</span>
+        <span><i style="background:var(--control)"></i>Pay award (your decision)</span>
+      </div>
+      <p class="note" id="wf-note"></p>
+    </div>
+  </section>
+
+  <!-- ============ DEPARTMENTS ============ -->
+  <section id="s-departments" hidden>
+    <h2>Your area: establishment, changes and trajectory</h2>
+    <div class="dept-pills" id="dept-pills"></div>
+    <div class="tiles" id="dept-tiles"></div>
+    <div class="cols">
+      <div>
+        <div class="card">
+          <h2 style="margin-top:0">Cost trajectory</h2>
+          <div id="dept-chart"></div>
+          <div class="legend"><span><i style="background:var(--s1)"></i>Total cost by year</span></div>
+        </div>
+        <div class="card">
+          <h2 style="margin-top:0">What changed / is changing</h2>
+          <div id="dept-changes"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2 style="margin-top:0">Establishment: every post</h2>
+          <div style="overflow-x:auto"><table id="dept-roster"></table></div>
+          <p class="note" id="dept-rolecount"></p>
+        </div>
+      </div>
+    </div>
+    <p class="note">Every figure here is the same reconciled data as the rest of the pack. Status is derived from each
+      post's start/end date: <b>established</b> (in post before this year), <b>joined in-year</b>, <b>approved future</b>, <b>leaving</b>.</p>
+  </section>
+
+  <!-- ============ DECISION ============ -->
+  <section id="s-decision" hidden>
+    <h2>C · What could we change? &nbsp;Candidate roles &amp; scenarios</h2>
+    <div class="tiles" id="dec-tiles"></div>
+    <div class="cols">
+      <div>
+        <div class="card">
+          <div id="scen"></div>
+          <div class="btnrow">
+            <button class="mini" id="all">Select all</button>
+            <button class="mini" id="none">Clear all</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2 style="margin-top:0">Cost impact by year</h2>
+          <div id="dec-chart"></div>
+          <div class="legend">
+            <span><i style="background:var(--committed)"></i>Committed baseline</span>
+            <span><i style="background:var(--s6)"></i>Added by scenario</span>
+          </div>
+        </div>
+        <div class="card">
+          <div style="overflow-x:auto"><table id="dec-table"></table></div>
+        </div>
+      </div>
+    </div>
+    <p class="note">Impact shown per budget year (people budget annually) with the three-year total alongside.
+      Deltas are against the committed establishment. NI on the workbook's basis.</p>
+  </section>
+
+  <!-- ============ FLAGS ============ -->
+  <section id="s-flags" hidden>
+    <h2>D · Concerns &amp; flags for the next three years</h2>
+    <div id="flags"></div>
+    <p class="note">Full disclosure for the C-suite. The board pack curates this list to what governs the decision.</p>
+  </section>
+</div>
+<div class="tt" id="tt"></div>
+
+<script>
+const DATA = {"meta":{"source":"Staff Costs & FTE Budget Model v2.1.xlsx","builtFrom":"driver columns \u2014 the values the workbook's own monthly formulas use","years":["BY1","BY2","BY3"],"yearLabels":{"BY1":"2026/27","BY2":"2027/28","BY3":"2028/29"},"fyStart":{"BY1":"2026-04-01","BY2":"2027-04-01","BY3":"2028-04-01"},"niBasis":"flat rate on (Basic + Bonus + CA), matching the workbook. Secondary threshold not applied \u2014 see NI-CALCULATION-PAPER.md","workbookTotals":{"BY1":4870487.463817501,"BY2":5108280.856840182,"BY3":5343927.904915622},"preparedBy":"Donna Graham","cyStart":"2025-04-01","by1Start":"2026-04-01"},"assumptions":{"BY1":{"bonusFactor":0.75,"db":0.16,"dc":0.08,"uplift":0.03,"ni":0.15,"niThreshold":417.0},"BY2":{"bonusFactor":0.75,"db":0.16,"dc":0.08,"uplift":0.03,"ni":0.16,"niThreshold":417.0},"BY3":{"bonusFactor":0.8,"db":0.16,"dc":0.08,"uplift":0.03,"ni":0.16,"niThreshold":417.0}},"committed":[{"_row":4,"Source":"Dec 2025","Full Name":"Sophia Robinson","FTE":1,"Position":"Accounts Payable Clerk","Position ID":"FIN-APCL","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D401","Department":"Finance","Manager":"Ava Johnson","Group":"CFO","Function":"Support","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":5,"Source":"Dec 2025","Full Name":"Freddie Thompson","FTE":1,"Position":"Accounts Receivable Clerk","Position ID":"FIN-ARCL","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D401","Department":"Finance","Manager":"Ava Johnson","Group":"CFO","Function":"Support","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":6,"Source":"Dec 2025","Full Name":"Alexander Bell","FTE":1,"Position":"Analytics Manager","Position ID":"BAN-AMGR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D450","Department":"Business Analytics","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":7,"Source":"Dec 2025","Full Name":"Claire Gibson","FTE":1,"Position":"Buyer","Position ID":"PRC-BUYR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D420","Department":"Procurement","Manager":"Louise Reid","Group":"CFO","Function":"Support","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":8,"Source":"Dec 2025","Full Name":"Aaron McLean","FTE":1,"Position":"CS Team Leader","Position ID":"CSC-TLDR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D200","Department":"Customer Support","Manager":null,"Group":"COO","Function":"Customer Services","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":9,"Source":"Dec 2025","Full Name":"Amy Murphy","FTE":1,"Position":"CS Team Leader","Position ID":"CSC-TLDR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D200","Department":"Customer Support","Manager":null,"Group":"COO","Function":"Customer Services","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":10,"Source":"Dec 2025","Full Name":"Grace White","FTE":1,"Position":"Cash & Treasury Assistant","Position ID":"FIN-CTAS","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D401","Department":"Finance","Manager":"Ava Johnson","Group":"CFO","Function":"Support","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":11,"Source":"Dec 2025","Full Name":"Emily Wilson","FTE":1,"Position":"Chief Commercial Officer (CCO)","Position ID":"EXE-CCO","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":100000,"Grade":"A","Cost-Centre":"D999","Department":"Exec Team","Manager":"Amelia Jones","Group":"CEO","Function":"Support","Bonus":0.30000000000000004,"drivers":{"BY1":{"salary":103000.0,"bonus":0.22500000000000003,"dc":0.08,"db":0.0,"ca":19776.0,"ni":0.15},"BY2":{"salary":106090.0,"bonus":0.22500000000000003,"dc":0.08,"db":0.0,"ca":19776.0,"ni":0.16},"BY3":{"salary":109272.7,"bonus":0.24000000000000005,"dc":0.08,"db":0.0,"ca":20369.28,"ni":0.16}}},{"_row":12,"Source":"Dec 2025","Full Name":"Amelia Jones","FTE":1,"Position":"Chief Executive Officer (CEO)","Position ID":"EXE-CEO","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":140000,"Grade":"A","Cost-Centre":"D999","Department":"Exec Team","Manager":"Board","Group":"CEO","Function":"Support","Bonus":0.30000000000000004,"drivers":{"BY1":{"salary":144200.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":24720.0,"ni":0.15},"BY2":{"salary":148526.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":24720.0,"ni":0.16},"BY3":{"salary":152981.78,"bonus":0.24000000000000005,"dc":0.0,"db":0.16,"ca":25461.600000000002,"ni":0.16}}},{"_row":13,"Source":"Dec 2025","Full Name":"Olivia Brown","FTE":1,"Position":"Chief Financial Officer (CFO)","Position ID":"EXE-CFO","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":120000,"Grade":"A","Cost-Centre":"D999","Department":"Exec Team","Manager":"Amelia Jones","Group":"CEO","Function":"Support","Bonus":0.30000000000000004,"drivers":{"BY1":{"salary":123600.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":19776.0,"ni":0.15},"BY2":{"salary":127308.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":19776.0,"ni":0.16},"BY3":{"salary":131127.24,"bonus":0.24000000000000005,"dc":0.0,"db":0.16,"ca":20369.28,"ni":0.16}}},{"_row":14,"Source":"Dec 2025","Full Name":"Jason Ritchie","FTE":1,"Position":"Chief Technology Officer (CTO)","Position ID":"EXE-CTO","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":120000,"Grade":"A","Cost-Centre":"D999","Department":"Exec Team","Manager":"Amelia Jones","Group":"CEO","Function":"Support","Bonus":0.30000000000000004,"drivers":{"BY1":{"salary":123600.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":19776.0,"ni":0.15},"BY2":{"salary":127308.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":19776.0,"ni":0.16},"BY3":{"salary":131127.24,"bonus":0.24000000000000005,"dc":0.0,"db":0.16,"ca":20369.28,"ni":0.16}}},{"_row":15,"Source":"Dec 2025","Full Name":"Jack Taylor","FTE":1,"Position":"Chief Operating Officer (COO)","Position ID":"EXE-COO","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":120000,"Grade":"A","Cost-Centre":"D999","Department":"Exec Team","Manager":"Amelia Jones","Group":"CEO","Function":"Support","Bonus":0.30000000000000004,"drivers":{"BY1":{"salary":123600.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":19776.0,"ni":0.15},"BY2":{"salary":127308.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":19776.0,"ni":0.16},"BY3":{"salary":131127.24,"bonus":0.24000000000000005,"dc":0.0,"db":0.16,"ca":20369.28,"ni":0.16}}},{"_row":16,"Source":"Dec 2025","Full Name":"Joanne Bell","FTE":1,"Position":"Content Specialist","Position ID":"MKT-CSPC","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D510","Department":"Marketing","Manager":"Fiona MacLeod","Group":"CCO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":17,"Source":"Dec 2025","Full Name":"Ben Armstrong","FTE":1,"Position":"Customer Support Advisor","Position ID":"CSC-CADV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":18,"Source":"Dec 2025","Full Name":"Callum Fraser","FTE":1,"Position":"Customer Support Advisor","Position ID":"CSC-CADV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":19,"Source":"Dec 2025","Full Name":"Chloe Davidson","FTE":1,"Position":"Customer Support Advisor","Position ID":"CSC-CADV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":20,"Source":"Dec 2025","Full Name":"Craig Wilson","FTE":1,"Position":"Customer Support Advisor","Position ID":"CSC-CADV","Start Date":"2025-10-01","End Date":"2026-02-28","Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":21,"Source":"Dec 2025","Full Name":"Dana Kelly","FTE":1,"Position":"Junior QA","Position ID":"ENG-JQA","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":22,"Source":"Dec 2025","Full Name":"Emma Boyd","FTE":1,"Position":"Junior QA","Position ID":"ENG-JQA","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":23,"Source":"Dec 2025","Full Name":"Hayley Dawson","FTE":1,"Position":"Support Engineer","Position ID":"ENG-SENG","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16}}},{"_row":24,"Source":"Dec 2025","Full Name":"Jamie Murray","FTE":1,"Position":"Support Engineer","Position ID":"ENG-SENG","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":25,"Source":"Dec 2025","Full Name":"Max Fisher","FTE":1,"Position":"Support Engineer","Position ID":"ENG-SENG","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":26,"Source":"Dec 2025","Full Name":"Michael Ross","FTE":1,"Position":"Support Engineer","Position ID":"ENG-SENG","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":27,"Source":"Dec 2025","Full Name":"Niamh O\u2019Connor","FTE":1,"Position":"Junior Developer","Position ID":"ENG-JDEV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":28,"Source":"Dec 2025","Full Name":"Denise Hunter","FTE":1,"Position":"Product Designer","Position ID":"ENG-DES","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":40000,"Grade":"C","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16}}},{"_row":29,"Source":"Dec 2025","Full Name":"Gordon Young","FTE":1,"Position":"Product Designer","Position ID":"ENG-DES","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":40000,"Grade":"C","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":30,"Source":"Dec 2025","Full Name":"Rebecca Grant","FTE":1,"Position":"Junior Developer","Position ID":"ENG-JDEV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":31,"Source":"Dec 2025","Full Name":"Stuart Crawford","FTE":1,"Position":"Junior Developer","Position ID":"ENG-JDEV","Start Date":"2025-10-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":32,"Source":"Dec 2025","Full Name":"Keith Ashworth","FTE":1,"Position":"Senior Developer","Position ID":"ENG-SRDEV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":40000,"Grade":"C","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":33,"Source":"Dec 2025","Full Name":"Dylan Campbell","FTE":1,"Position":"Senior Developer","Position ID":"ENG-SRDEV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":40000,"Grade":"C","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":34,"Source":"Dec 2025","Full Name":"Melissa Kelly","FTE":1,"Position":"Data Analyst","Position ID":"BAN-DANL","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D450","Department":"Business Analytics","Manager":"Alexander Bell","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":35,"Source":"Dec 2025","Full Name":"Priya Sharma","FTE":1,"Position":"Data Analyst","Position ID":"BAN-DANL","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D450","Department":"Business Analytics","Manager":"Alexander Bell","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":36,"Source":"Dec 2025","Full Name":"Lucy Mitchell","FTE":1,"Position":"Data Engineer","Position ID":"ENG-DENG","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":37,"Source":"Dec 2025","Full Name":"Isla Evans","FTE":1,"Position":"FP&A Manager","Position ID":"FIN-FPAM","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":68000,"Grade":"B","Cost-Centre":"D401","Department":"Finance","Manager":"Olivia Brown","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":70040.0,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.15},"BY2":{"salary":72141.2,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16},"BY3":{"salary":74305.436,"bonus":0.16000000000000003,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16}}},{"_row":38,"Source":"Dec 2025","Full Name":"Charlie Roberts","FTE":1,"Position":"Finance Business Partner","Position ID":"FIN-FBP","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D401","Department":"Finance","Manager":"Isla Evans","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":39,"Source":"Dec 2025","Full Name":"Ava Johnson","FTE":1,"Position":"Finance Manager","Position ID":"FIN-FMGR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D401","Department":"Finance","Manager":"Olivia Brown","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":5092.32,"ni":0.16}}},{"_row":40,"Source":"Dec 2025","Full Name":"Jacob Wright","FTE":1,"Position":"Financial Analyst","Position ID":"FIN-FANL","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D401","Department":"Finance","Manager":"Isla Evans","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":41,"Source":"Dec 2025","Full Name":"Noah Thomas","FTE":1,"Position":"Financial Controller","Position ID":"FIN-FCON","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D401","Department":"Finance","Manager":"Olivia Brown","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":9888.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":9888.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":10184.64,"ni":0.16}}},{"_row":42,"Source":"Dec 2025","Full Name":"James Turner","FTE":1,"Position":"HR Administrator","Position ID":"HR-HRADM","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D410","Department":"HR","Manager":"George Davies","Group":"CEO","Function":"Support","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":43,"Source":"Dec 2025","Full Name":"Ella Hall","FTE":1,"Position":"HR Advisor","Position ID":"HR-HRAD","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D410","Department":"HR","Manager":"George Davies","Group":"CEO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":44,"Source":"Dec 2025","Full Name":"Oscar Wood","FTE":1,"Position":"HR Advisor","Position ID":"HR-HRAD","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D410","Department":"HR","Manager":"George Davies","Group":"CEO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":45,"Source":"Dec 2025","Full Name":"Thomas Green","FTE":1,"Position":"HR Business Partner","Position ID":"HR-HRBP","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":40000,"Grade":"B","Cost-Centre":"D410","Department":"HR","Manager":"George Davies","Group":"CEO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16}}},{"_row":46,"Source":"Dec 2025","Full Name":"George Davies","FTE":1,"Position":"HR Director","Position ID":"HR-HDIR","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":100000,"Grade":"A","Cost-Centre":"D410","Department":"HR","Manager":"Amelia Jones","Group":"CEO","Function":"Support","Bonus":0.30000000000000004,"drivers":{"BY1":{"salary":103000.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":14832.0,"ni":0.15},"BY2":{"salary":106090.0,"bonus":0.22500000000000003,"dc":0.0,"db":0.16,"ca":14832.0,"ni":0.16},"BY3":{"salary":109272.7,"bonus":0.24000000000000005,"dc":0.0,"db":0.16,"ca":15276.96,"ni":0.16}}},{"_row":47,"Source":"Dec 2025","Full Name":"Fiona MacLeod","FTE":1,"Position":"Head of Marketing","Position ID":"MKT-HMKT","Start Date":null,"End Date":null,"Pension Type":"DB","Annual Salary":65000,"Grade":"B","Cost-Centre":"D510","Department":"Marketing","Manager":"Emily Wilson","Group":"CCO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":66950.0,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.15},"BY2":{"salary":68958.5,"bonus":0.15000000000000002,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16},"BY3":{"salary":71027.255,"bonus":0.16000000000000003,"dc":0.0,"db":0.16,"ca":0.0,"ni":0.16}}},{"_row":48,"Source":"Dec 2025","Full Name":"Rachel Owens","FTE":1,"Position":"IT Manager","Position ID":"IT-ITMG","Start Date":"2025-12-15","End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D440","Department":"IT","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":49,"Source":"Dec 2025","Full Name":"Ruby Phillips","FTE":1,"Position":"IT Support Analyst","Position ID":"IT-ITSA","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D440","Department":"IT","Manager":"Rachel Owens","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":50,"Source":"Dec 2025","Full Name":"Zoe Stewart","FTE":1,"Position":"Maintenance Technician","Position ID":"SIT-MTEC","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D480","Department":"Site Management","Manager":"Carol Mitchell","Group":"CEO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":51,"Source":"Dec 2025","Full Name":"Mia Walker","FTE":1,"Position":"Management Accountant","Position ID":"FIN-MACC","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D401","Department":"Finance","Manager":"Ava Johnson","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":52,"Source":"Dec 2025","Full Name":"Mason Patel","FTE":1,"Position":"Marketing Analyst","Position ID":"MKT-DMEX","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D510","Department":"Marketing","Manager":"Fiona MacLeod","Group":"CCO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":53,"Source":"Dec 2025","Full Name":"NED 1","FTE":0.2,"Position":"Non-Executive Director","Position ID":"EXE-NED","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":100000,"Grade":"N","Cost-Centre":"D999","Department":"Exec Team","Manager":"Jack Taylor","Group":"CEO","Function":"Support","Bonus":0,"drivers":{"BY1":{"salary":103000.0,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":106090.0,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":109272.7,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":54,"Source":"Dec 2025","Full Name":"NED 2","FTE":0.2,"Position":"Non-Executive Director","Position ID":"EXE-NED","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":100000,"Grade":"N","Cost-Centre":"D999","Department":"Exec Team","Manager":"Jack Taylor","Group":"CEO","Function":"Support","Bonus":0,"drivers":{"BY1":{"salary":103000.0,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":106090.0,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":109272.7,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":55,"Source":"Dec 2025","Full Name":"NED 3","FTE":0.2,"Position":"Non-Executive Director","Position ID":"EXE-NED","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":100000,"Grade":"N","Cost-Centre":"D999","Department":"Exec Team","Manager":"Jack Taylor","Group":"CEO","Function":"Support","Bonus":0,"drivers":{"BY1":{"salary":103000.0,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":106090.0,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":109272.7,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":56,"Source":"Dec 2025","Full Name":"Craig Robertson","FTE":1,"Position":"Pricing Analyst","Position ID":"SAL-PANL","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":57,"Source":"Dec 2025","Full Name":"Nicola Hamilton","FTE":1,"Position":"Pricing Specialist","Position ID":"SAL-PSPC","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":40000,"Grade":"C","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":58,"Source":"Dec 2025","Full Name":"Chloe Watson","FTE":1,"Position":"Principal Data Analyst","Position ID":"BAN-PDA","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":58000,"Grade":"B","Cost-Centre":"D450","Department":"Business Analytics","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":59740.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":61532.200000000004,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":63378.166000000005,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":59,"Source":"Dec 2025","Full Name":"Louise Reid","FTE":1,"Position":"Procurement Manager","Position ID":"PRC-PMGR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D420","Department":"Procurement","Manager":"Jack Taylor","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":5092.32,"ni":0.16}}},{"_row":60,"Source":"Dec 2025","Full Name":"Ian Wallace","FTE":1,"Position":"Sales Administrator","Position ID":"SAL-SADM","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":61,"Source":"Dec 2025","Full Name":"Julie Thomson","FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":62,"Source":"Dec 2025","Full Name":"Alison Murray","FTE":1,"Position":"Sales Manager","Position ID":"SAL-SMGR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D720","Department":"Sales","Manager":"Emily Wilson","Group":"COO","Function":"Sales","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":5092.32,"ni":0.16}}},{"_row":63,"Source":"Dec 2025","Full Name":"Robert Scott","FTE":1,"Position":"Sales Specialist","Position ID":"SAL-SPE","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":64,"Source":"Dec 2025","Full Name":"Andrew Paterson","FTE":1,"Position":"Project & Delivery Manager","Position ID":"PRO-PMO","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D470","Department":"Product Management","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":65,"Source":"Dec 2025","Full Name":"Paula Grant","FTE":1,"Position":"Senior Buyer","Position ID":"PRC-SBUY","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D420","Department":"Procurement","Manager":"Louise Reid","Group":"CFO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":66,"Source":"Dec 2025","Full Name":"Aimee Kennedy","FTE":1,"Position":"Senior Customer Advisor","Position ID":"CSC-SADV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":67,"Source":"Dec 2025","Full Name":"Benjamin Simpson","FTE":1,"Position":"Senior Customer Advisor","Position ID":"CSC-SADV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":68,"Source":"Dec 2025","Full Name":"Ellie Shaw","FTE":1,"Position":"Senior Customer Advisor","Position ID":"CSC-SADV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":69,"Source":"Dec 2025","Full Name":"Hannah Price","FTE":1,"Position":"Senior Data Analyst","Position ID":"BAN-SDA","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D450","Department":"Business Analytics","Manager":"Alexander Bell","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":70,"Source":"Dec 2025","Full Name":"Lily Edwards","FTE":1,"Position":"Senior HR Business Partner","Position ID":"HR-SHRBP","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D410","Department":"HR","Manager":"George Davies","Group":"CEO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":71,"Source":"Dec 2025","Full Name":"Steven Robertson","FTE":1,"Position":"Senior Marketing Specialist","Position ID":"MKT-SMS","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":40000,"Grade":"B","Cost-Centre":"D510","Department":"Marketing","Manager":"Fiona MacLeod","Group":"CCO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":41200.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":42436.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":43709.08,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":72,"Source":"Dec 2025","Full Name":"Carol Mitchell","FTE":1,"Position":"Site Manager","Position ID":"SIT-SMGR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D480","Department":"Site Management","Manager":"Jack Taylor","Group":"CEO","Function":"Support","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":73,"Source":"Dec 2025","Full Name":"Joshua Howard","FTE":1,"Position":"Software Developer","Position ID":"ENG-SDEV","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D460","Department":"Engineering","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":74,"Source":"Dec 2025","Full Name":"Jessica Ward","FTE":1,"Position":"Systems Administrator","Position ID":"IT-SADM","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D440","Department":"IT","Manager":"Rachel Owens","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":75,"Source":"Dec 2025","Full Name":"Nathan Reilly","FTE":1,"Position":"Systems Administrator","Position ID":"IT-SADM","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D440","Department":"IT","Manager":"Rachel Owens","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":76,"Source":"Dec 2025","Full Name":"Gail Cooper","FTE":1,"Position":"Engineering Manager","Position ID":"ENG-EMG","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D440","Department":"IT","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":77,"Source":"Dec 2025","Full Name":"David McMillan","FTE":1,"Position":"Customer Support Manager","Position ID":"CSC-CSMG","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D200","Department":"Customer Support","Manager":"Jack Taylor","Group":"COO","Function":"Customer Services","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":4944.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":5092.32,"ni":0.16}}},{"_row":78,"Source":"Dec 2025","Full Name":"Alan Ross","FTE":1,"Position":"Product Manager","Position ID":"PRO-PMGR","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":60000,"Grade":"B","Cost-Centre":"D470","Department":"Product Management","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":61800.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":63654.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":65563.62,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":79,"Source":"Dec 2025","Full Name":"Ryan Martin","FTE":1,"Position":"Project & Delivery Manager","Position ID":"PRO-PMO","Start Date":null,"End Date":null,"Pension Type":"DC","Annual Salary":30000,"Grade":"C","Cost-Centre":"D470","Department":"Product Management","Manager":"Jason Ritchie","Group":"CTO","Function":"Technology","Bonus":0.2,"drivers":{"BY1":{"salary":30900.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":31827.0,"bonus":0.15000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":32781.81,"bonus":0.16000000000000003,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":80,"Source":"2026-03-01","Full Name":"VACANT","FTE":1,"Position":"Customer Support Advisor","Position ID":"CSC-CADV","Start Date":"2026-03-01","End Date":null,"Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":81,"Source":"Intern","Full Name":"Intern","FTE":1,"Position":"Intern (Sales)","Position ID":"INT-SAL","Start Date":"2026-07-31","End Date":"2026-09-30","Pension Type":"DC","Annual Salary":26377.8,"Grade":"I","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0,"drivers":{"BY1":{"salary":27169.134,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":82,"Source":"Intern","Full Name":"Intern","FTE":1,"Position":"Intern (IT)","Position ID":"INT-IT","Start Date":"2026-07-31","End Date":"2026-09-30","Pension Type":"DC","Annual Salary":26377.8,"Grade":"I","Cost-Centre":"D440","Department":"IT","Manager":"Rachel Owens","Group":"CTO","Function":"Technology","Bonus":0,"drivers":{"BY1":{"salary":27169.134,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.0,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":83,"Source":"Approved Future","Full Name":"Approved Future","FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2027-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":84,"Source":"Approved Future","Full Name":"Approved Future","FTE":1,"Position":"Customer Support Advisor","Position ID":"CSC-CADV","Start Date":"2027-04-01","End Date":null,"Pension Type":"DC","Annual Salary":26377.8,"Grade":"E","Cost-Centre":"D200","Department":"Customer Support","Manager":"Aaron McLean","Group":"COO","Function":"Customer Services","Bonus":0.1,"drivers":{"BY1":{"salary":27169.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":27984.20802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":28823.7342606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":85,"Source":"Approved Future","Full Name":"Approved Future","FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2028-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"D","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}}],"candidates":[{"_row":4,"Source":"Scenario A - grows Sales","Full Name":1,"FTE":1,"Position":"Intern (Sales)","Position ID":"INT-SAL","Start Date":"2026-08-01","End Date":"2026-10-31","Pension Type":"DC","Annual Salary":15392,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":15853.76,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":16329.372800000001,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":16819.253984000003,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":5,"Source":"Scenario A - grows Sales","Full Name":1,"FTE":1,"Position":"Intern (Sales)","Position ID":"INT-SAL","Start Date":"2027-08-01","End Date":"2027-10-31","Pension Type":"DC","Annual Salary":15392,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":15853.76,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":16329.372800000001,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":16819.253984000003,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":6,"Source":"Scenario A - grows Sales","Full Name":1,"FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2027-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":8,"Source":"Scenario B - Accelerates Sales Growth","Full Name":1,"FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2026-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":9,"Source":"Scenario B - Accelerates Sales Growth","Full Name":1,"FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2026-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":10,"Source":"Scenario B - Accelerates Sales Growth","Full Name":1,"FTE":1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2026-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":11,"Source":"Scenario B - Accelerates Sales Growth","Full Name":1,"FTE":-1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2027-04-01","End Date":null,"Pension Type":"DC","Annual Salary":-27877.8,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":-28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":-29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":-30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":12,"Source":"Scenario B - Accelerates Sales Growth","Full Name":1,"FTE":-1,"Position":"Sales Associate","Position ID":"SAL-SASC","Start Date":"2028-04-01","End Date":null,"Pension Type":"DC","Annual Salary":-27877.8,"Grade":"COO","Cost-Centre":"D720","Department":"Sales","Manager":"Alison Murray","Group":"COO","Function":"Sales","Bonus":0.1,"drivers":{"BY1":{"salary":-28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":-29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":-30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":14,"Source":"Scenario C - Accelerates the Product","Full Name":1,"FTE":1,"Position":"Intern (Engineering)","Position ID":"INT-ENG","Start Date":"2026-08-01","End Date":"2026-10-31","Pension Type":"DC","Annual Salary":15392,"Grade":"CTO","Cost-Centre":"D460","Department":"Technology","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":15853.76,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":16329.372800000001,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":16819.253984000003,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":15,"Source":"Scenario C - Accelerates the Product","Full Name":1,"FTE":1,"Position":"Intern (Engineering)","Position ID":"INT-ENG","Start Date":"2027-08-01","End Date":"2027-10-31","Pension Type":"DC","Annual Salary":15392,"Grade":"CTO","Cost-Centre":"D460","Department":"Technology","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":15853.76,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":16329.372800000001,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":16819.253984000003,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":16,"Source":"Scenario C - Accelerates the Product","Full Name":1,"FTE":1,"Position":"Software Developer","Position ID":"ENG-SDEV","Start Date":"2026-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"CTO","Cost-Centre":"D460","Department":"Technology","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":17,"Source":"Scenario C - Accelerates the Product","Full Name":1,"FTE":1,"Position":"Data Engineer","Position ID":"ENG-DENG","Start Date":"2026-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"CTO","Cost-Centre":"D460","Department":"Technology","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}},{"_row":18,"Source":"Scenario C - Accelerates the Product","Full Name":1,"FTE":1,"Position":"Product Designer","Position ID":"ENG-DES","Start Date":"2026-04-01","End Date":null,"Pension Type":"DC","Annual Salary":27877.8,"Grade":"CTO","Cost-Centre":"D460","Department":"Technology","Manager":"Gail Cooper","Group":"CTO","Function":"Technology","Bonus":0.1,"drivers":{"BY1":{"salary":28714.134,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.15},"BY2":{"salary":29575.55802,"bonus":0.07500000000000001,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16},"BY3":{"salary":30462.8247606,"bonus":0.08000000000000002,"dc":0.08,"db":0.0,"ca":0.0,"ni":0.16}}}],"retrospective":{"components":[{"name":"Basic","budget":3214669.43,"actual":3159259.4},{"name":"Bonus","budget":476944.46,"actual":437154.54},{"name":"DC Pension","budget":189862.82,"actual":115239.48},{"name":"DB Pension","budget":134621.46,"actual":130700.4},{"name":"CA","budget":144000.0,"actual":143200.0},{"name":"NI","budget":519797.68,"actual":503583.24}],"budgetTotal":4679895.85,"actualTotal":4489137.06,"variance":-190758.79,"variancePct":-0.04076133232751343,"actualPeriods":[1,2,3,4,5,6,7,8,9],"forecastPeriods":[10,11,12]},"currentYear":{"outturn":4489137.06,"budget":4679895.85,"variance":-190758.79,"variancePct":-0.04076133232751343,"actualPeriods":[1,2,3,4,5,6,7,8,9],"forecastPeriods":[10,11,12]},"flags":[{"level":"watch","title":"Pension take-up may rise","body":"DC pension is budgeted at 8% but current take-up is 3.55%. Prudent to hold 8%, take-up can jump any time (a pay rise, turning 40, a nudge). Budgeting to 3.55% would leave no headroom if it does."},{"level":"watch","title":"Bonus at 75% achievement","body":"Budgeted at 75% corporate achievement. A full-achievement year is the single largest upside sensitivity. The assumption least within management control."},{"level":"info","title":"Maternity: SMP is ~92% reclaimable","body":"Two staff on maternity. SMP is largely reclaimed from HMRC, so the real cost is the cover, not the pay drop. The rebate is not yet modelled; actuals show gross SMP."},{"level":"info","title":"DB vs DC pension in transition","body":"Legacy DB members (16%) alongside DC (8%). Two schemes, two cost stories, normal for UK reward mid-transition, but they move differently and should be read separately."},{"level":"watch","title":"Attrition and recruitment lag not costed","body":"Turnover rates are calculated but no vacancy saving, recruitment cost or backfill reaches any budget year. Vacancy gaps here are individually dated, not modelled."},{"level":"info","title":"Employer NI on flat-rate basis","body":"NI uses the secondary threshold but no Employment Allowance, and BY2/BY3 rates are assumed. See NI-CALCULATION-PAPER.md for the full basis."}],"departmentOutturn":{"Marketing":225815.59,"Sales":288687.63,"Exec Team":1082350.12,"HR":439021.41,"Site Management":124348.05,"Finance":501825.1,"Procurement":162909.09,"Customer Support":502121.66,"Business Analytics":286024.81,"Engineering":439354.7,"IT":270590.19,"Product Management":161997.15,"#N/A":4091.56}};
+const YEARS = DATA.meta.years, YL = DATA.meta.yearLabels;
+const FY1 = {BY1:2026, BY2:2027, BY3:2028};
+const MONTHS = ["Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar"];
+const COMPS = ["Basic","Bonus","DC Pension","DB Pension","CA","NI"];
+
+function monthEnd(y,i){const yr=FY1[y]+(i>8?1:0);const m=(4+i>12)?4+i-12:4+i;return new Date(Date.UTC(yr,m,0));}
+const MEND={}; YEARS.forEach(y=>MEND[y]=MONTHS.map((_,i)=>monthEnd(y,i)));
+const D=s=>s?new Date(s+"T00:00:00Z"):null;
+const fmt=n=>(n<0?"−":"")+"£"+Math.abs(Math.round(n)).toLocaleString("en-GB");
+const fmtK=n=>(n<0?"−":"")+"£"+(Math.abs(n)>=1e6?(Math.abs(n)/1e6).toFixed(2)+"m":Math.round(Math.abs(n)/1000)+"k");
+const sign=n=>(n>0?"+":"")+fmt(n);
+
+/* engine: matches the workbook and the Python verifier exactly */
+function costOf(rec,opts){
+  opts=opts||{};
+  const base=rec["Annual Salary"]||0; const sal={}; let prev=base;
+  YEARS.forEach(y=>{ const up = opts.uplift!=null?opts.uplift:(DATA.assumptions[y].uplift||0); prev=prev*(1+up); sal[y]=prev; });
+  const fte=rec.FTE||0, br=rec.Bonus||0;
+  const isDC=rec["Pension Type"]==="DC", isDB=rec["Pension Type"]==="DB";
+  let start=D(rec["Start Date"]), end=D(rec["End Date"]);
+  if(opts.shift&&start){ start=new Date(start); start.setUTCMonth(start.getUTCMonth()+opts.shift); }
+  const res={};
+  YEARS.forEach(y=>{
+    const a=DATA.assumptions[y], ca=(rec.drivers[y]&&rec.drivers[y].ca)||0;
+    const ni=a.ni||0, bf=a.bonusFactor||0, dc=a.dc||0, db=a.db||0, thr=a.niThreshold||0;
+    let t=0;
+    for(let i=0;i<12;i++){
+      const me=MEND[y][i]; const on=(!start||start<=me)&&(!end||end>=me);
+      const f=on?fte:0;
+      const basic=sal[y]*Math.abs(f)/12, bon=basic*br*bf;   // ABS on FTE only, matching the workbook
+      const pdc=isDC?basic*dc:0, pdb=isDB?basic*db:0;
+      const cam=Math.round(ca/12*100)/100*f;
+      const nim=Math.max(0,(basic+bon+cam)-thr)*ni;
+      t+=basic+bon+pdc+pdb+cam+nim;
+    }
+    res[y]=t;
+  });
+  return res;
+}
+function estTotal(recs,year,opts){ let t=0; recs.forEach(r=>t+=costOf(r,opts)[year]); return t; }
+
+DATA.committed.forEach((r,i)=>r._key="c"+i);
+DATA.candidates.forEach((r,i)=>{r._key="k"+i;});
+const picked={}, shift={};
+DATA.candidates.forEach(r=>{picked[r._key]=false; shift[r._key]=0;});
+let payAward = DATA.assumptions.BY1.uplift||0.03;
+let activeStop = "budget";
+
+/* ---------- tooltip ---------- */
+const NS="http://www.w3.org/2000/svg", tt=document.getElementById("tt");
+const mk=(p,n,a,t)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;p.appendChild(e);return e;};
+const svg=(host,w,h)=>{host.innerHTML="";const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox",`0 0 ${w} ${h}`);host.appendChild(s);return s;};
+function hov(node,html){node.addEventListener("mousemove",e=>{tt.innerHTML=html;tt.style.opacity=1;tt.style.left=Math.min(e.clientX+14,innerWidth-200)+"px";tt.style.top=(e.clientY-10)+"px";});node.addEventListener("mouseleave",()=>tt.style.opacity=0);}
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p;}
+
+/* ============ A · RETROSPECTIVE ============ */
+function retro(){
+  const r=DATA.retrospective;
+  const el=document.getElementById("retro-tiles"); el.innerHTML="";
+  const tiles=[
+    ["Outturn",fmtK(r.actualTotal),`P${r.actualPeriods[0]}–${r.actualPeriods.slice(-1)} actual + forecast`,""],
+    ["Approved budget",fmtK(r.budgetTotal),"the plan","" ],
+    ["Variance",sign(r.variance),(r.variancePct*100).toFixed(1)+"% "+(r.variance<0?"underspend":"overspend"),r.variance<0?"neg":"pos"],
+  ];
+  tiles.forEach(([l,v,d,c])=>el.insertAdjacentHTML("beforeend",
+    `<div class="tile"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${c}">${d}</div></div>`));
+
+  // paired bars by component
+  const W=760,H=250,L=64,R=16,T=14,B=64;
+  const g=svg(document.getElementById("retro-chart"),W,H);
+  const comps=r.components;
+  const max=niceMax(Math.max(...comps.flatMap(c=>[c.budget,c.actual]))*1.08);
+  const step=(W-L-R)/comps.length, bw=Math.min(26,step*.32);
+  for(let k=0;k<=4;k++){const v=max*k/4;
+    mk(g,"line",{x1:L,x2:W-R,y1:H-B-(v/max)*(H-T-B),y2:H-B-(v/max)*(H-T-B),class:"gl"});
+    mk(g,"text",{x:L-7,y:H-B-(v/max)*(H-T-B)+3.5,"text-anchor":"end",class:"t"},fmtK(v));}
+  mk(g,"line",{x1:L,x2:W-R,y1:H-B,y2:H-B,class:"ax"});
+  const y=v=>H-B-(v/max)*(H-T-B);
+  comps.forEach((c,i)=>{
+    const cx=L+step*(i+.5);
+    [[c.budget,"--s1",-bw-1],[c.actual,"--s6",1]].forEach(([v,col,off])=>{
+      const rr=mk(g,"rect",{x:cx+off,y:y(v),width:bw,height:Math.max(1,y(0)-y(v)),rx:3,fill:`var(${col})`,stroke:"var(--surface-1)","stroke-width":1.5});
+      hov(rr,`<b>${c.name}</b><br>${col.includes("s1")?"Budget":"Actual"} ${fmt(v)}`);
+    });
+    const d=c.actual-c.budget;
+    mk(g,"text",{x:cx,y:y(Math.max(c.budget,c.actual))-6,"text-anchor":"middle",class:"v",fill:d<0?"var(--up)":"var(--crit)"},sign(d).replace("£","£"));
+    mk(g,"text",{x:cx,y:H-B+16,"text-anchor":"middle",class:"t"},c.name.includes(" ")?c.name.split(" ")[0]:c.name);
+    if(c.name.includes(" ")) mk(g,"text",{x:cx,y:H-B+28,"text-anchor":"middle",class:"t"},c.name.split(" ").slice(1).join(" "));
+  });
+
+  // commentary: biggest movers
+  const sorted=[...comps].map(c=>({...c,v:c.actual-c.budget})).sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
+  const big=sorted[0], second=sorted[1];
+  document.getElementById("retro-comment").innerHTML=
+    `The year came in <b>${sign(r.variance)}</b> against budget, <b>${Math.abs(r.variancePct*100).toFixed(1)}% ${r.variance<0?"underspend":"overspend"}</b>. `
+    +`An underspend on staff is not automatically good news. It often means posts sat empty or take-up ran below plan. `
+    +`The largest driver is <b>${big.name}</b> at <b>${sign(big.v)}</b>`
+    +(big.name.includes("Pension")?`, pension take-up below the budgeted rate, the single least-obvious mover`:``)
+    +`, then <b>${second.name}</b> at <b>${sign(second.v)}</b>. `
+    +`Note the net figure hides offsets: never read the headline without the decomposition above.`;
+}
+
+/* ============ B · STANDSTILL WATERFALL ============ */
+function waterfall(){
+  const outturn=DATA.currentYear.outturn;
+  const standstill=estTotal(DATA.committed,"BY1",{uplift:0});
+  const budget=estTotal(DATA.committed,"BY1",{uplift:payAward});
+  const volume=standstill-outturn;
+  const award=budget-standstill;
+
+  const bars=[
+    {lab:"Outturn",type:"base",val:outturn,stop:"outturn"},
+    {lab:"Establishment",type:"committed",val:volume,note:"leavers out, joiners annualised, maternity returns, vacancies filled, already committed"},
+    {lab:"Standstill",type:"mark",val:standstill,stop:"standstill"},
+    {lab:"Pay award",type:"control",val:award,note:`${(payAward*100).toFixed(1)}% award on the establishment, your decision`},
+    {lab:"Committed",type:"base",val:budget,stop:"budget"},
+  ];
+
+  // the index in `bars` up to which a stop reveals the build
+  const stopIndex={outturn:0, standstill:2, budget:4};
+  const cutoff=stopIndex[activeStop];
+  const stopVal={outturn,standstill,budget};
+  const stopLabel={outturn:"Outturn: where the current year landed",
+                   standstill:"Standstill: the same establishment next year, no pay rise",
+                   budget:`Committed budget: including the ${(payAward*100).toFixed(1)}% pay award`};
+
+  // headline readout for the selected stop
+  document.getElementById("wf-head").innerHTML=
+    `<span class="big">${fmtK(stopVal[activeStop])}</span><span class="lab">${stopLabel[activeStop]}</span>`;
+
+  const W=820,H=300,L=70,R=20,T=24,B=70;
+  const g=svg(document.getElementById("waterfall"),W,H);
+  const lo=Math.min(outturn,standstill,budget)*0.985, hi=Math.max(budget,standstill)*1.01;
+  const y=v=>H-B-((v-lo)/(hi-lo))*(H-T-B);
+  for(let k=0;k<=4;k++){const v=lo+(hi-lo)*k/4;
+    mk(g,"line",{x1:L,x2:W-R,y1:y(v),y2:y(v),class:"gl"});
+    mk(g,"text",{x:L-8,y:y(v)+3.5,"text-anchor":"end",class:"t"},fmtK(v));}
+  const step=(W-L-R)/bars.length, bw=Math.min(90,step*.6);
+  let acc=0;
+  bars.forEach((b,i)=>{
+    const cx=L+step*(i+.5);
+    const beyond = i>cutoff;                 // dim everything past the selected stop
+    const op = beyond ? 0.22 : 1;
+    if(b.type==="base"||b.type==="mark"){
+      const yv=y(b.val);
+      const isSel = b.stop===activeStop;
+      mk(g,"rect",{x:cx-bw/2,y:yv,width:bw,height:Math.max(2,y(lo)-yv),rx:4,
+        fill:b.type==="mark"?"none":"var(--s1)",
+        stroke:b.type==="mark"?(isSel?"var(--s1)":"var(--axis)"):"var(--surface-1)",
+        "stroke-width":b.type==="mark"?(isSel?2.5:1.5):2,
+        "stroke-dasharray":b.type==="mark"?"4 3":"0","fill-opacity":b.type==="mark"?0:op,
+        "stroke-opacity":beyond?0.4:1});
+      mk(g,"text",{x:cx,y:yv-8,"text-anchor":"middle",class:"v","fill-opacity":op},fmtK(b.val));
+      acc=b.val;
+    } else {
+      const from=acc, to=acc+b.val; acc=to;
+      const fill=b.type==="control"?"var(--control)":"var(--committed)";
+      const yv=Math.min(y(from),y(to));
+      const rr=mk(g,"rect",{x:cx-bw/2,y:yv,width:bw,height:Math.max(2,Math.abs(y(to)-y(from))),rx:3,fill,
+        stroke:"var(--surface-1)","stroke-width":2,"fill-opacity":op});
+      hov(rr,`<b>${b.lab}</b><br>${sign(b.val)}<br><span style="color:var(--muted)">${b.note||""}</span>`);
+      mk(g,"text",{x:cx,y:yv-8,"text-anchor":"middle",class:"v","fill-opacity":op},(b.val>0?"+":"")+fmtK(b.val));
+      mk(g,"line",{x1:L+step*(i-.5)+bw/2,x2:cx-bw/2,y1:y(from),y2:y(from),stroke:"var(--axis)","stroke-dasharray":"3 3","stroke-width":1,"stroke-opacity":beyond?0.3:1});
+    }
+    mk(g,"text",{x:cx,y:H-B+18,"text-anchor":"middle",class:"t","fill-opacity":beyond?0.4:1},b.lab.length>13?b.lab.slice(0,12)+"…":b.lab);
+  });
+  mk(g,"line",{x1:L,x2:W-R,y1:y(lo),y2:y(lo),class:"ax"});
+
+  document.getElementById("wf-note").innerHTML =
+    `<b>Standstill £${(standstill/1e6).toFixed(2)}m</b> is the same establishment next year with no pay rise. `
+    +`The ${sign(volume)} above outturn is change already committed (annualisation, returns, filled vacancies), not a new decision. `
+    +`<b>The pay award is the one lever you control.</b> `
+    +`For 2026/27 the award is the only rate increase; the employer-NI step falls in 2027/28. `
+    +`Click Outturn / Standstill / Budget above to step through each position.`;
+  document.querySelectorAll("#stops button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.stop===activeStop));
+}
+
+/* ============ C · DECISION ============ */
+function decision(){
+  const baseline={}; YEARS.forEach(y=>baseline[y]=estTotal(DATA.committed,y));
+  const chosen=DATA.candidates.filter(r=>picked[r._key]);
+  const scen={}; YEARS.forEach(y=>scen[y]=estTotal(DATA.committed.concat(chosen),y,{}));
+  // apply shifts for chosen
+  YEARS.forEach(y=>{scen[y]=estTotal(DATA.committed,y)+chosen.reduce((a,r)=>a+costOf(r,{shift:shift[r._key]})[y],0);});
+
+  // tiles: per year impact
+  const el=document.getElementById("dec-tiles"); el.innerHTML="";
+  YEARS.forEach(y=>{
+    const d=scen[y]-baseline[y];
+    el.insertAdjacentHTML("beforeend",
+      `<div class="tile"><div class="l">${YL[y]} impact</div><div class="v">${d?sign(d).replace("£","£"):"nil"}</div>
+       <div class="d">${fmtK(scen[y])} total</div></div>`);
+  });
+  const d3=YEARS.reduce((a,y)=>a+(scen[y]-baseline[y]),0);
+  el.insertAdjacentHTML("beforeend",
+    `<div class="tile"><div class="l">3-year impact</div><div class="v">${d3?sign(d3).replace("£","£"):"nil"}</div>
+     <div class="d">${chosen.length} role${chosen.length!==1?"s":""} added</div></div>`);
+
+  roles();
+  decChart(baseline,scen);
+  decTable(baseline,scen);
+}
+function roles(){
+  const host=document.getElementById("scen"); host.innerHTML="";
+  const groups={}; DATA.candidates.forEach(r=>{(groups[r.Source||"Unassigned"] ||= []).push(r);});
+  Object.keys(groups).sort().forEach(gname=>{
+    const rs=groups[gname], anyOn=rs.some(r=>picked[r._key]);
+    const div=document.createElement("div"); div.className="grp";
+    div.innerHTML=`<div class="gh"><span>${gname}</span><button class="mini" data-g="${gname}">${anyOn?"Remove all":"Add all"}</button></div>`;
+    rs.forEach(r=>{
+      const c=costOf(r,{shift:shift[r._key]});
+      const perYr=YEARS.map(y=>c[y]).filter(v=>v>0);
+      const firstFull=Math.max(...YEARS.map(y=>c[y]));
+      const row=document.createElement("div"); row.className="role"+(picked[r._key]?"":" off");
+      row.innerHTML=`<input type="checkbox" ${picked[r._key]?"checked":""}>
+        <span class="nm"><b>${r.Position}</b><span>${r.Department} · grade ${r.Grade} · ${r["Start Date"]?"from "+r["Start Date"]:"in post"}</span></span>
+        <span class="cost">${fmtK(firstFull)}/yr</span>`;
+      row.querySelector("input").onchange=e=>{picked[r._key]=e.target.checked; decision();};
+      div.appendChild(row);
+      const df=document.createElement("div"); df.className="defer";
+      df.innerHTML=`<span>defer</span><select>${[0,3,6,9,12,24].map(m=>`<option value="${m}" ${shift[r._key]===m?"selected":""}>${m?m+" months":"none"}</option>`).join("")}</select>`;
+      df.querySelector("select").onchange=e=>{shift[r._key]=+e.target.value; decision();};
+      div.appendChild(df);
+    });
+    host.appendChild(div);
+  });
+  host.querySelectorAll("button[data-g]").forEach(b=>b.onclick=()=>{
+    const rs=groups[b.dataset.g], anyOn=rs.some(r=>picked[r._key]); rs.forEach(r=>picked[r._key]=!anyOn); decision();});
+}
+function decChart(base,scen){
+  const W=460,H=250,L=58,R=16,T=16,B=34;
+  const g=svg(document.getElementById("dec-chart"),W,H);
+  const max=niceMax(Math.max(...YEARS.map(y=>scen[y]))*1.08);
+  const step=(W-L-R)/YEARS.length, bw=Math.min(70,step*.5);
+  const y=v=>H-B-(v/max)*(H-T-B);
+  for(let k=0;k<=4;k++){const v=max*k/4;
+    mk(g,"line",{x1:L,x2:W-R,y1:y(v),y2:y(v),class:"gl"});
+    mk(g,"text",{x:L-7,y:y(v)+3.5,"text-anchor":"end",class:"t"},fmtK(v));}
+  YEARS.forEach((yr,i)=>{
+    const cx=L+step*(i+.5), b=base[yr], add=scen[yr]-base[yr];
+    const rb=mk(g,"rect",{x:cx-bw/2,y:y(b),width:bw,height:Math.max(1,y(0)-y(b)),rx:3,fill:"var(--committed)",stroke:"var(--surface-1)","stroke-width":2});
+    hov(rb,`<b>${YL[yr]}</b><br>Committed ${fmt(b)}`);
+    if(add>0.5){const ra=mk(g,"rect",{x:cx-bw/2,y:y(b+add),width:bw,height:Math.max(1,y(b)-y(b+add)),rx:3,fill:"var(--s6)",stroke:"var(--surface-1)","stroke-width":2});
+      hov(ra,`<b>${YL[yr]}</b><br>Added ${fmt(add)}`);
+      mk(g,"text",{x:cx,y:y(b+add)-7,"text-anchor":"middle",class:"v"},sign(add).replace("£","£"));}
+    mk(g,"text",{x:cx,y:H-12,"text-anchor":"middle",class:"t"},YL[yr]);
+  });
+  mk(g,"line",{x1:L,x2:W-R,y1:y(0),y2:y(0),class:"ax"});
+}
+function decTable(base,scen){
+  const t=document.getElementById("dec-table");
+  let h=`<thead><tr><th>&nbsp;</th>${YEARS.map(y=>`<th>${YL[y]}</th>`).join("")}<th>3-yr</th></tr></thead><tbody>`;
+  const b3=YEARS.reduce((a,y)=>a+base[y],0), s3=YEARS.reduce((a,y)=>a+scen[y],0);
+  h+=`<tr><td>Committed</td>${YEARS.map(y=>`<td>${fmt(base[y])}</td>`).join("")}<td>${fmt(b3)}</td></tr>`;
+  h+=`<tr><td>With scenario</td>${YEARS.map(y=>`<td>${fmt(scen[y])}</td>`).join("")}<td>${fmt(s3)}</td></tr>`;
+  h+=`<tr class="hi"><td>Impact</td>${YEARS.map(y=>`<td>${sign(scen[y]-base[y])}</td>`).join("")}<td>${sign(s3-b3)}</td></tr>`;
+  t.innerHTML=h+`</tbody>`;
+}
+
+/* ============ DEPARTMENTS ============ */
+const CY_START=D(DATA.meta.cyStart), BY1_START=D(DATA.meta.by1Start);
+function statusOf(r){
+  const s=D(r["Start Date"]), e=D(r["End Date"]);
+  if(s && s>=BY1_START) return "future";
+  if(s && s>=CY_START && s<BY1_START) return "joined";
+  if(e && e<BY1_START) return "leaving";
+  return "established";
+}
+const STLABEL={established:"established",joined:"joined in-year",future:"approved future",leaving:"leaving"};
+let activeDept=null;
+function departments(){
+  // build pills grouped by function
+  const byFn={};
+  DATA.committed.forEach(r=>{const f=r.Function||"(none)",d=r.Department||"(none)"; (byFn[f] ||= new Set()).add(d);});
+  const host=document.getElementById("dept-pills"); host.innerHTML="";
+  Object.keys(byFn).sort().forEach(f=>{
+    host.insertAdjacentHTML("beforeend",`<div class="fnhead">${f}</div>`);
+    [...byFn[f]].sort().forEach(dep=>{
+      if(!activeDept) activeDept=dep;
+      const b=document.createElement("button"); b.textContent=dep;
+      b.setAttribute("aria-pressed",dep===activeDept);
+      b.onclick=()=>{activeDept=dep; departments();};
+      host.appendChild(b);
+    });
+  });
+  const posts=DATA.committed.filter(r=>(r.Department||"(none)")===activeDept);
+  deptDetail(posts);
+}
+function deptDetail(posts){
+  const cost={}; YEARS.forEach(y=>cost[y]=estTotal(posts,y));
+  const outturn=DATA.departmentOutturn[activeDept]||0;
+  const fte=posts.reduce((a,r)=>a+(r.FTE||0),0);
+  // tiles
+  const el=document.getElementById("dept-tiles"); el.innerHTML="";
+  const tiles=[
+    ["Headcount",posts.length,`${fte.toFixed(1)} FTE`],
+    ["Outturn 25/26",fmtK(outturn),"actual + forecast"],
+    ["Budget 26/27",fmtK(cost.BY1),(cost.BY1-outturn>=0?"+":"")+fmtK(cost.BY1-outturn)+" vs outturn"],
+    ["By 28/29",fmtK(cost.BY3),((cost.BY3/cost.BY1-1)*100).toFixed(1)+"% over BY1"],
+  ];
+  tiles.forEach(([l,v,d])=>el.insertAdjacentHTML("beforeend",
+    `<div class="tile"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`));
+
+  // trajectory chart: outturn -> BY1 -> BY2 -> BY3
+  const pts=[["25/26",outturn],["26/27",cost.BY1],["27/28",cost.BY2],["28/29",cost.BY3]];
+  const W=460,H=230,L=58,R=16,T=16,B=34;
+  const g=svg(document.getElementById("dept-chart"),W,H);
+  const max=niceMax(Math.max(...pts.map(p=>p[1]))*1.12)||1;
+  const step=(W-L-R)/pts.length, bw=Math.min(64,step*.5);
+  const y=v=>H-B-(v/max)*(H-T-B);
+  for(let k=0;k<=4;k++){const v=max*k/4;
+    mk(g,"line",{x1:L,x2:W-R,y1:y(v),y2:y(v),class:"gl"});
+    mk(g,"text",{x:L-7,y:y(v)+3.5,"text-anchor":"end",class:"t"},fmtK(v));}
+  pts.forEach(([lab,v],i)=>{
+    const cx=L+step*(i+.5);
+    const rr=mk(g,"rect",{x:cx-bw/2,y:y(v),width:bw,height:Math.max(1,y(0)-y(v)),rx:3,fill:i===0?"var(--committed)":"var(--s1)",stroke:"var(--surface-1)","stroke-width":2});
+    hov(rr,`<b>${lab}</b><br>${fmt(v)}`);
+    mk(g,"text",{x:cx,y:y(v)-7,"text-anchor":"middle",class:"v"},fmtK(v));
+    mk(g,"text",{x:cx,y:H-12,"text-anchor":"middle",class:"t"},lab);
+  });
+  mk(g,"line",{x1:L,x2:W-R,y1:y(0),y2:y(0),class:"ax"});
+
+  // roster
+  const t=document.getElementById("dept-roster");
+  let h=`<thead><tr><th>Position</th><th>Grade</th><th>FTE</th><th>Status</th><th>26/27</th></tr></thead><tbody>`;
+  posts.map(r=>({r,st:statusOf(r),c:costOf(r)})).sort((a,b)=>b.c.BY1-a.c.BY1).forEach(({r,st,c})=>{
+    h+=`<tr><td>${r.Position}</td><td>${r.Grade}</td><td>${(r.FTE||0).toFixed(1)}</td>`
+      +`<td style="text-align:left"><span class="stbadge st-${st}">${STLABEL[st]}</span></td>`
+      +`<td>${fmt(c.BY1)}</td></tr>`;
+  });
+  t.innerHTML=h+`</tbody>`;
+
+  // role count summary ("how many engineers")
+  const roleCount={}; posts.forEach(r=>{roleCount[r.Position]=(roleCount[r.Position]||0)+1;});
+  const dup=Object.entries(roleCount).filter(([,n])=>n>1).sort((a,b)=>b[1]-a[1]);
+  document.getElementById("dept-rolecount").innerHTML = dup.length
+    ? "Multiple of the same role: "+dup.map(([p,n])=>`<b>${n}× ${p}</b>`).join(", ")
+    : "Every post here is a distinct role.";
+
+  // changes
+  const ch=document.getElementById("dept-changes"); ch.innerHTML="";
+  const changes=posts.map(r=>({r,st:statusOf(r)})).filter(x=>x.st!=="established");
+  if(!changes.length){ ch.innerHTML=`<p class="note" style="margin:0">No in-year or planned changes. This department is stable across the plan.</p>`; }
+  else changes.sort((a,b)=>(a.r["Start Date"]||"").localeCompare(b.r["Start Date"]||"")).forEach(({r,st})=>{
+    const when = st==="leaving" ? `leaving ${r["End Date"]}` : `from ${r["Start Date"]}`;
+    ch.insertAdjacentHTML("beforeend",
+      `<div class="changeline"><span class="stbadge st-${st}">${STLABEL[st]}</span> &nbsp;<b>${r.Position}</b> (${r.Grade}), ${when}</div>`);
+  });
+}
+
+/* ============ D · FLAGS ============ */
+function flags(){
+  const host=document.getElementById("flags"); host.innerHTML="";
+  DATA.flags.forEach(f=>host.insertAdjacentHTML("beforeend",
+    `<div class="flag ${f.level}"><b>${f.title}</b><p>${f.body}</p></div>`));
+}
+
+/* ---------- parity + wiring ---------- */
+function parity(){
+  const base=estTotal(DATA.committed,"BY1",{uplift:DATA.assumptions.BY1.uplift});
+  const exp=DATA.meta.workbookTotals.BY1;
+  const dot=document.getElementById("pdot"), txt=document.getElementById("ptext");
+  const ok=Math.abs(base-exp)<1;
+  dot.style.background=ok?"var(--good)":"var(--crit)";
+  txt.textContent=ok?"baseline ties to workbook":`differs £${Math.round(Math.abs(base-exp))}`;
+}
+function tab(which){
+  ["analysis","departments","decision","flags"].forEach(s=>{
+    document.getElementById("s-"+s).hidden=(s!==which);
+    document.getElementById("t-"+s).setAttribute("aria-selected",s===which);
+  });
+  if(which==="departments") departments();  // (re)render on show so charts size correctly
+}
+document.getElementById("t-analysis").onclick=()=>tab("analysis");
+document.getElementById("t-departments").onclick=()=>tab("departments");
+document.getElementById("t-decision").onclick=()=>tab("decision");
+document.getElementById("t-flags").onclick=()=>tab("flags");
+document.getElementById("all").onclick=()=>{DATA.candidates.forEach(r=>picked[r._key]=true);decision();};
+document.getElementById("none").onclick=()=>{DATA.candidates.forEach(r=>picked[r._key]=false);decision();};
+const pa=document.getElementById("pa");
+pa.value=payAward; document.getElementById("pa-out").textContent=(payAward*100).toFixed(1)+"%";
+pa.oninput=()=>{payAward=+pa.value; document.getElementById("pa-out").textContent=(payAward*100).toFixed(1)+"%"; activeStop="budget"; waterfall();};
+document.querySelectorAll("#stops button").forEach(b=>b.onclick=()=>{activeStop=b.dataset.stop; waterfall();});
+
+document.getElementById("by").textContent=`Prepared by ${DATA.meta.preparedBy} · source ${DATA.meta.source} · all figures reconciled to the workbook`;
+parity(); retro(); waterfall(); decision(); flags(); departments();
+addEventListener("resize",()=>{retro();waterfall();decision();if(!document.getElementById("s-departments").hidden)departments();});
+</script>

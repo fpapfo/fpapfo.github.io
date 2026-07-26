@@ -78,4 +78,4 @@ So, a work in progress. But the shape of it is already clear, and it is a good s
 
 If you take one thing from this, take the split. Work out which parts of your process are deterministic, which are probabilistic, and where you have to sit. Automate the first without mercy. Let AI draft the second. Guard the third. And whatever you build, tie it back to the model you already trust, or you have simply built a faster way to be wrong.
 
-The current outputs, the exec pack, the decision tool and the board deck, are up in the [workshop](../workshop), and that's where I will keep posting progress as the workflow firms up. Have a poke around and check back, because it is only going to get better from here.
+The current outputs, the exec pack, the decision tool and the board deck, are up in the [workshop](/workshop), and that's where I will keep posting progress as the workflow firms up. Have a poke around and check back, because it is only going to get better from here.

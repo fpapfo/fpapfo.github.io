@@ -76,7 +76,9 @@ One reconciled dataset, many views. Every output, the C-suite tool, the board pa
 
 ---
 
+
 <p style="color: red;">The new addition to my workflows:</p>
+
 
 ## fp-coach
 

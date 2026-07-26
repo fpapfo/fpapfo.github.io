@@ -28,8 +28,8 @@ A look behind the scenes at the workflows and decision-support tools I am buildi
 
 **The outputs.** These render straight from the reconciled model, so they always agree with it.
 
-* **[C-suite analysis](../assets/tools/csuite-tool.html) and [decision tool](../assets/tools/fte-decision-tool.html)**: the interactive pack. How the year landed, where the budget is heading (the standstill waterfall and the pay-award lever), a departments drill-down, live scenario testing, and the concerns and flags.
-* **[Board pack](../assets/tools/board-pack.html)**: the same numbers, board-framed at function level and locked to the agreed decision.
+* **[C-suite analysis](/assets/tools/csuite-tool.html) and [decision tool](/assets/tools/fte-decision-tool.html)**: the interactive pack. How the year landed, where the budget is heading (the standstill waterfall and the pay-award lever), a departments drill-down, live scenario testing, and the concerns and flags.
+* **[Board pack](/assets/tools/board-pack.html)**: the same numbers, board-framed at function level and locked to the agreed decision.
 
 **The two-sided flow.**
 

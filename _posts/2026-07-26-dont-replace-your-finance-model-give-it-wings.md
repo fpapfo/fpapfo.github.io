@@ -68,7 +68,7 @@ So none of it slipped through. That's the point. The guardrails did exactly what
 
 This is working, and it is early and in progress, and both are true at once.
 
-The outputs are already strong. The [exec pack](../assets/tools/csuite-tool.html), the [decision tool](../assets/tools/fte-decision-tool.html) and the [board deck](../assets/tools/board-pack.html) are the kind of thing that used to eat a week of my time, and they are sitting there reconciled to the model, to the penny. Good enough that the value is obvious. Early enough that I can still see the edges I want to file down.
+The outputs are already strong. The [exec pack](/assets/tools/csuite-tool.html), the [decision tool](/assets/tools/fte-decision-tool.html) and the [board deck](/assets/tools/board-pack.html) are the kind of thing that used to eat a week of my time, and they are sitting there reconciled to the model, to the penny. Good enough that the value is obvious. Early enough that I can still see the edges I want to file down.
 
 What's left is the unglamorous, important part, and I am not going to pretend otherwise. Polishing the outputs so they are not just right but a pleasure to read. Pinning down what the workflow looks like end to end, so it isn't a clever one-off but something that runs the same way every single time. And wrapping it in the controls a finance team can actually lean on: reliable, repeatable, auditable, every run, not only the good ones.
 

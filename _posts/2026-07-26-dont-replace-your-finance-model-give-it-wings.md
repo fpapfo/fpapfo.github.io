@@ -10,7 +10,7 @@ So the question was never "can AI do the budget". It was "which parts of this ar
 
 ## Deterministic, probabilistic, human
 
-**Deterministic** work has one right answer and must give the same answer every time. The arithmetic of a cost model, the reconciliation, pulling the figures out, the on-cost build. This is code and formulas, not judgement, and it should be boringly exact. Let a language model freestyle here and you have lost.
+**Deterministic** work has one right answer and must give the same answer every time. The arithmetic of a cost model, the reconciliation, pulling the figures out, the on-cost build. This is code and formulas, not judgement, and it should be boringly exact. Don't let a LLM freestyle here. 
 
 **Probabilistic** work is where judgement and language live. What's worth flagging to the board. How to tell the story of a variance. How to design a tool a non-finance director can actually use. This is where AI earns its keep, because it is fast, tireless and good at the first draft of exactly the things that eat an FP&A week.
 
@@ -20,11 +20,13 @@ Most of the design was just labelling each step: deterministic, probabilistic, o
 
 ## The model isn't the problem, and it's not going anywhere
 
-Here is the bit the demos skip. Finance is not a blank page. We have models, built over years, that hold a fortune in hard-won logic. Mine is a Staff Costs and FTE model: current-year budget, actuals and forecast, a three-year plan, every position with its grade, pension and on-costs. I trust it. I am not binning it to start again with a chatbot.
+Here is the bit the demos skip. Finance is not a blank page. We have models, built over years, that hold a fortune in hard-won logic. Mine is a Staff Costs and FTE model: current-year budget, actuals and forecast, a three-year plan, every position with grades, pensions and on-costs, and sensitivities and scenarios. I trust it. I am not binning it to start again with a chatbot.
 
 So this was the opposite of "replace the model". Take the model I already have and know, and use a workflow to build the slow bits, the parts that eat the days: the validation, the analysis, the finessing, and the decision tools Excel makes genuinely hard to build.
 
-The rule, which I never broke, is that the workbook stays the single source of truth and the audit trail. Nothing the workflow produces is allowed to become a second, competing version of the numbers. Everything reads from the workbook and reconciles back to it, to the penny. The tools reflect the model. They never fork it. That one rule is the whole reason this is safe to put in front of a board.
+The rule, which I never broke, is that the workbook stays the single source of truth and the audit trail. Nothing the workflow produces is allowed to become a second, competing version of the numbers. Everything reads from the workbook and reconciles back to it, to the penny. The tools reflect the model. They never fork it. 
+
+That one rule is the whole reason this is safe to put in front of a board.
 
 ## What the workflow does
 
@@ -38,7 +40,6 @@ The human sits at every seam. You pick the scenario. You agree the budget before
 
 Under the bonnet, that maps cleanly onto the three-way split. The deterministic layer is code that reads the workbook, extracts every figure and reconciles it back. The decision tool reproduces the model's own arithmetic exactly, so its numbers tie to the workbook to the penny, if they ever disagreed, the tool would be the thing that's wrong. The judgement, the narrative and the design sit on top of that, and I stay in the chair for every decision.
 
-  Centred with optional caption:
 
 <figure style="text-align:center">
     <img src="/assets/images/workflow-diagram.svg" alt="Workflow diagram showing a trusted finance model flowing left to right through four stages, Validate, Build, Decide and Board pack, with a dotted line looping every stage back to the model. Each stage is colour-coded as deterministic, probabilistic or human in the loop.">

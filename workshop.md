@@ -7,14 +7,11 @@ permalink: /workshop/
 
 A look behind the scenes at the workflows and decision-support tools I am building. This is where I document the ideas, prototypes and lessons as they take shape.
 
-<figure style="text-align:center">
-    <img src="/assets/images/workflow-diagram.svg" alt="Workflow diagram showing a trusted finance model flowing left to right through four stages, Validate, Build, Decide and Board pack, with a dotted line looping every stage back to the model. Each stage is colour-coded as deterministic, probabilistic or human in the loop.">
-    <figcaption>A model you already trust, validated to the penny, turned into an exec pack and a live decision tool, signed off by a human, then built into a board pack, with everything reconciling back to the workbook. Colour-coded by the three-way split: deterministic, probabilistic, human.</figcaption>
-  </figure>
-
-*One workflow, three kinds of work. The model stays the source of truth, the workflow does the slow work, and the human owns every decision.*
+---
 
 ## Staff Costs & FTE Budget Workflow
+
+*One workflow, three kinds of work. The model stays the source of truth, the workflow does the slow work, and the human owns every decision.*
 
 **Goal.** Turn an existing model, in this case my Staff Costs & FTE budget model, into a full workflow:
 
@@ -22,6 +19,12 @@ A look behind the scenes at the workflows and decision-support tools I am buildi
 * Validate and reconcile
 * C-suite pack with an interactive decision-support tool
 * Board presentation pack
+
+<figure style="text-align:center">
+    <img src="/assets/images/workflow-diagram.svg" alt="Workflow diagram showing a trusted finance model flowing left to right through four stages, Validate, Build, Decide and Board pack, with a dotted line looping every stage back to the model. Each stage is colour-coded as deterministic, probabilistic or human in the loop.">
+    <figcaption>A model you already trust, validated to the penny, turned into an exec pack and a live decision tool, signed off by a human, then built into a board pack, with everything reconciling back to the workbook. Colour-coded by the three-way split: deterministic, probabilistic, human.</figcaption>
+  </figure>
+
 
 **Current stage.**
 

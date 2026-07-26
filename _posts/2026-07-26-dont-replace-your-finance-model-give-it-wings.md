@@ -1,6 +1,6 @@
 ---
 title: "Don't Replace Your Finance Model. Give It Wings."
-excerpt: "The wings are a workflow. Here's what happened when I wrapped a workflow around a finance model I already trusted, the three-way split that keeps it safe, and where it is up to now."
+excerpt: "The wings are a workflow. Here's what happened when I wrapped a workflow around a finance model I already trusted, the three-way split that keeps it safe, and where it's up to now."
 ---
 5 minute read
 

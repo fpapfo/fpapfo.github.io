@@ -75,7 +75,8 @@ Underneath sits the board-presentation skill pack: input-fte-model, fp-data-chec
 One reconciled dataset, many views. Every output, the C-suite tool, the board pack, the exec summary, renders from the same tied-back numbers. Change the workbook, re-run the pipeline, and everything refreshes with nothing able to silently disagree. That's what the reconciliation gate and the engine-parity check protect.
 
 
-*The new addition:*
+<p style="color: red;">The new addition to my workflows:</p>
+
 ## fp-coach
 
 **What it is.** A skill that turns the workflow into a learning experience for whoever runs it, so someone who is not a finance expert understands what's happening rather than clicking through blind.

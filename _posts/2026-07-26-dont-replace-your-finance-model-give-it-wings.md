@@ -1,8 +1,8 @@
 ---
 title: "Don't Replace Your Finance Model. Give It Wings."
-excerpt: "The wings are a workflow. Everyone is asking whether AI can do the budget, which is the wrong question. Here is what happened when I wrapped a workflow around a finance model I already trusted, the three-way split that keeps it safe, and where it is up to now."
+excerpt: "The wings are a workflow. Here's what happened when I wrapped a workflow around a finance model I already trusted, the three-way split that keeps it safe, and where it is up to now."
 ---
-*The wings are a workflow. Everyone is asking whether AI can do the budget, which is the wrong question. Here is what happened when I wrapped a workflow around a finance model I already trusted, the three-way split that keeps it safe, and where it is up to now.*
+*The wings are a workflow. Here's what happened when I wrapped a workflow around a finance model I already trusted, the three-way split that keeps it safe, and where it is up to now.*
 
 Every AI-in-finance demo asks the same thing. Can the model do the budget? Watch it read a spreadsheet, write some commentary, draw a chart. Impressive for about a minute, until you remember that in finance the output has to be repeatable, reliable and auditable. A budget isn't a draft you regenerate when it looks a bit off. Someone signs it. Someone gets held to it.
 

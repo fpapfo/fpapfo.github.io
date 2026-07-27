@@ -1,8 +1,16 @@
 remote_theme: jekyll/minima@v2.5.1   # or omit @… to track latest, but pinning is safer
 plugins:
   - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
 
 title: "Donna Graham FP&A"
+description: >-
+  Practical FP&A work, shown in the open: reproducible Excel and financial
+  modelling techniques, finance automation, and interactive decision tools.
+url: "https://dgrhm.com"
+author: "Donna Graham"
 
 email: hello@dgrhm.com
 

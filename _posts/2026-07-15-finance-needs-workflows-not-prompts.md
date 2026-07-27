@@ -61,14 +61,14 @@ AI-enabled finance workflows don't all look the same. Some improve existing fina
 
 **Example workflow 1: Variance analysis to board-ready executive briefing.**
 <figure>
-  <img src="\assets\images\board-deck-workflow.png" alt="Example workflow 1 diagram showing a variance analysis process progressing through audit documentation, management reporting, financial storytelling, human review, board deck preparation, executive summary and meeting preparation.">
+  <img src="/assets/images/board-deck-workflow.png" alt="Example workflow 1 diagram showing a variance analysis process progressing through audit documentation, management reporting, financial storytelling, human review, board deck preparation, executive summary and meeting preparation.">
   <figcaption>Traditional FP&A reporting redesigned as a governed AI-enabled workflow. Each step has a defined purpose, produces a defined output and uses the most appropriate force before progressing to the next stage.</figcaption>
 </figure>
 
 
 **Example workflow 2: Working capital analysis to interactive decision simulator.**
 <figure>
-  <img src="\assets\images\ccc-workflow-map.png" alt="Example workflow 2 map showing three analysis skills feeding a CCC report, then a HITL checkpoint, then a decision support tool">
+  <img src="/assets/images/ccc-workflow-map.png" alt="Example workflow 2 map showing three analysis skills feeding a CCC report, then a HITL checkpoint, then a decision support tool">
   <figcaption>The same principles can also produce interactive decision-support tools. The workflow validates the analysis, pauses for human review and then generates a business tool rather than a static report. The simulator itself is linked at the end of the article.</figcaption>
 </figure>
 
@@ -153,7 +153,7 @@ This is the reason none of this can be delegated to an LLM. When the numbers go 
 
 **Example workflow 2: Human-in-the-loop review and approval checkpoint.**
 <figure>
-  <img src="\assets\images\HITL_checkpoint-lm.png" alt="A Human in the Loop checkpoint in Example Workflow 2: it reports 9 of 9 tests passed, reconciliations tying to the dollar, a table of the numbers that will drive the simulator, a flagged assumption, and a question asking the user to sign off before proceeding">
+  <img src="/assets/images/HITL_checkpoint-lm.png" alt="A Human in the Loop checkpoint in Example Workflow 2: it reports 9 of 9 tests passed, reconciliations tying to the dollar, a table of the numbers that will drive the simulator, a flagged assumption, and a question asking the user to sign off before proceeding">
   <figcaption>The workflow pauses for sign-off. It shows what reconciles, names the one figure that is an assumption rather than a fact, points to the file holding the full working, and asks before going further. This is the human in the loop: not watching, but being asked.</figcaption>
 </figure>
 
@@ -183,7 +183,7 @@ That is the difference between a result and an audit trail. A result is a number
 
 **Example outputs from Workflow 1. Each step produces a defined artefact, from audit workbooks and governance records through to management reports, board materials and QA documentation.**
 <figure>
-  <img src="\assets\images\outputs.png" alt="Example output folder from the example workflow 1, showing sequentially numbered artefacts including variance analysis, audit workbook, governance analysis, management reporting, board deck and quality assurance documents..">
+  <img src="/assets/images/outputs.png" alt="Example output folder from the example workflow 1, showing sequentially numbered artefacts including variance analysis, audit workbook, governance analysis, management reporting, board deck and quality assurance documents..">
   <figcaption>Example outputs from Workflow 1. Each step produces a defined artefact, from audit workbooks and governance records through to management reports, board materials and QA documentation.</figcaption>
 </figure>
 

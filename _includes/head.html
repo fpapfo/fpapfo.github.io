@@ -12,6 +12,20 @@
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" type="image/x-icon">
   <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}" type="image/x-icon">
 
+  {%- if page.path == "404.html" -%}
+  <script>
+    // On the 404 page, tag the hit with the attempted path and the referrer.
+    // Internal referrer (a dgrhm.com page) means a broken link to fix.
+    // "direct" means a typed/guessed URL or a bot, not a site problem.
+    // Must run before count.js loads, hence it lives here in the head.
+    window.goatcounter = {
+      path: function (p) {
+        return '404: ' + p + ' (from: ' + (document.referrer || 'direct') + ')';
+      }
+    };
+  </script>
+  {%- endif -%}
+
   <script
     data-goatcounter="https://dglittle.goatcounter.com/count"
     async

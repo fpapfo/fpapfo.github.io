@@ -54,12 +54,29 @@ nav{position:fixed;bottom:16px;right:18px;display:flex;gap:7px;align-items:cente
 nav button{font:inherit;font-size:14px;width:32px;height:32px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .pnum{position:fixed;bottom:22px;left:22px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;z-index:9}
 @media print{nav,.pnum{display:none}.slide{min-height:auto;height:190mm;padding:14mm;max-width:none}body{background:#fff}:root{--bg:#fff;--card:#fff;--ink:#000;--ink2:#333}@page{size:A4 landscape;margin:0}}
+/* brand: Navy & Slate (from scripts/brand.py) */
+:root{
+  --brand: #1E2A44;
+  --accent: #3E7C88;
+  --control: #1E2A44;
+  --committed: #5C6675;
+  --good: #2E9C63;
+  --up: #2E9C63;
+  --warn: #C98A1E;
+  --crit: #C0492F;
+  --s1: #1E2A44;
+  --s2: #3E7C88;
+  --s3: #C6A15B;
+  --s4: #B58274;
+  --s5: #7E93AC;
+  --s6: #5E8B74;
+}
 </style>
 <div id="deck"></div>
 <nav><button id="prev">←</button><span class="pnum" id="pn"></span><button id="next">→</button><button id="thm">◐</button></nav>
 
 <script>
-const D={"preparedBy":"Donna Graham","source":"Staff Costs & FTE Budget Model v2.1.xlsx","yearLabels":{"BY1":"2026/27","BY2":"2027/28","BY3":"2028/29"},"currentYear":{"outturn":4489137,"budget":4679896,"variance":-190759,"variancePct":-0.04076133232751343},"budgetYears":{"BY1":4870487,"BY2":5108281,"BY3":5343928},"threeYear":15322696,"standstill":{"outturn":4489137,"sameTeam":4731924,"budget":4870487},"byFunction":[{"name":"Customer Services","headcount":16,"fte":16,"outturn":502122,"by1":578434,"by2":636508,"by3":659557},{"name":"Sales","headcount":9,"fte":9,"outturn":288688,"by1":314037,"by2":355777,"by3":408967},{"name":"Support","headcount":32,"fte":29.6,"outturn":2536269,"by1":2711690,"by2":2810011,"by3":2919578},{"name":"Technology","headcount":25,"fte":25,"outturn":1157967,"by1":1266327,"by2":1305985,"by3":1355826}],"retrospective":{"components":[{"name":"Basic","budget":3214669.43,"actual":3159259.4},{"name":"Bonus","budget":476944.46,"actual":437154.54},{"name":"DC Pension","budget":189862.82,"actual":115239.48},{"name":"DB Pension","budget":134621.46,"actual":130700.4},{"name":"CA","budget":144000.0,"actual":143200.0},{"name":"NI","budget":519797.68,"actual":503583.24}],"budgetTotal":4679895.85,"actualTotal":4489137.06,"variance":-190758.79,"variancePct":-0.04076133232751343,"actualPeriods":[1,2,3,4,5,6,7,8,9],"forecastPeriods":[10,11,12]},"flags":[{"level":"watch","title":"Pension take-up may rise","body":"DC pension is budgeted at 8% but current take-up is 3.55%. Prudent to hold 8%, take-up can jump any time (a pay rise, turning 40, a nudge). Budgeting to 3.55% would leave no headroom if it does."},{"level":"watch","title":"Bonus at 75% achievement","body":"Budgeted at 75% corporate achievement. A full-achievement year is the single largest upside sensitivity. The assumption least within management control."},{"level":"watch","title":"Attrition and recruitment lag not costed","body":"Turnover rates are calculated but no vacancy saving, recruitment cost or backfill reaches any budget year. Vacancy gaps here are individually dated, not modelled."}],"totalFTE":79.6,"headcount":82};
+const D={"preparedBy":"Donna Graham","source":"Staff Costs & FTE Budget Model v2.4.xlsx","yearLabels":{"BY1":"2026/27","BY2":"2027/28","BY3":"2028/29"},"currentYear":{"outturn":4489137,"budget":4679896,"variance":-190759,"variancePct":-0.04076133232751343},"budgetYears":{"BY1":4870487,"BY2":5108281,"BY3":5343928},"threeYear":15322696,"standstill":{"outturn":4489137,"sameTeam":4731924,"budget":4870487},"byFunction":[{"name":"Customer Services","headcount":16,"fte":16,"outturn":502122,"by1":578434,"by2":636508,"by3":659557},{"name":"Sales","headcount":9,"fte":9,"outturn":288688,"by1":314037,"by2":355777,"by3":408967},{"name":"Support","headcount":32,"fte":29.6,"outturn":2536269,"by1":2711690,"by2":2810011,"by3":2919578},{"name":"Technology","headcount":25,"fte":25,"outturn":1157967,"by1":1266327,"by2":1305985,"by3":1355826}],"retrospective":{"components":[{"name":"Basic","budget":3214669.43,"actual":3159259.4},{"name":"Bonus","budget":476944.46,"actual":437154.54},{"name":"DC Pension","budget":189862.82,"actual":115239.48},{"name":"DB Pension","budget":134621.46,"actual":130700.4},{"name":"CA","budget":144000.0,"actual":143200.0},{"name":"NI","budget":519797.68,"actual":503583.24}],"budgetTotal":4679895.85,"actualTotal":4489137.06,"variance":-190758.79,"variancePct":-0.04076133232751343,"actualPeriods":[1,2,3,4,5,6,7,8,9],"forecastPeriods":[10,11,12]},"flags":[{"level":"watch","title":"Pension take-up may rise","body":"DC pension is budgeted at 8% but current take-up is 3.55%. Prudent to hold 8%, take-up can jump any time (a pay rise, turning 40, a nudge). Budgeting to 3.55% would leave no headroom if it does."},{"level":"watch","title":"Bonus at 75% achievement","body":"Budgeted at 75% corporate achievement. A full-achievement year is the single largest upside sensitivity. The assumption least within management control."},{"level":"watch","title":"Attrition and recruitment lag not costed","body":"Turnover rates are calculated but no vacancy saving, recruitment cost or backfill reaches any budget year. Vacancy gaps here are individually dated, not modelled."}],"totalFTE":79.6,"headcount":82};
 const YL=D.yearLabels, m=v=>(v<0?"−":"")+"£"+Math.abs(Math.round(v)).toLocaleString("en-GB");
 const mK=v=>(v<0?"−":"")+"£"+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+"m":Math.round(Math.abs(v)/1000)+"k");
 const sign=v=>(v>0?"+":"")+m(v);
@@ -73,7 +90,6 @@ const deck=document.getElementById("deck");
 // 1 title
 deck.append(slide(`<div class="eyebrow">Board of Directors · Budget approval</div>
   <h1>Workforce Budget<br>2026/27 – 2028/29</h1>
-  <a href="/workshop/">Return to Workshop</a>
   <p class="lede">Three-year establishment plan, current-year outturn, and impact by function.
   All figures reconciled to ${D.source}.</p>
   <div class="note">Prepared by ${D.preparedBy}. Preview: committed baseline (no new scenarios locked yet).</div>`));

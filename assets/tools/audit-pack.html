@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Budget Pack, Basis of Preparation and Audit Trail</title>
+<style>
+:root{
+  --brand: #1E2A44;
+  --accent: #3E7C88;
+  --ink: #1C222B;
+  --muted: #5C6675;
+  --faint: #8B93A0;
+  --hair: #E4E7EC;
+  --hairStrong: #CBD2DA;
+  --paper: #FFFFFF;
+  --ground: #F7F8FA;
+  --good: #2E9C63;
+  --watch: #C98A1E;
+  --critical: #C0492F;
+  --s1: #1E2A44;
+  --s2: #3E7C88;
+  --s3: #C6A15B;
+  --s4: #B58274;
+  --s5: #7E93AC;
+  --s6: #5E8B74;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.doc{max-width:860px;margin:0 auto;padding:64px 30px 90px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:30px;line-height:1.15;margin:0 0 8px;color:var(--brand);letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0 0 4px;font-size:15px}
+.meta{color:var(--muted);font-size:13.5px;margin:14px 0 0}
+.meta b{color:var(--ink)}
+h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:20px;margin:44px 0 4px;color:var(--brand);
+  border-bottom:2px solid var(--brand);padding-bottom:7px}
+.lead-in{color:var(--muted);font-size:14.5px;margin:8px 0 16px;max-width:64ch}
+.badge{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;
+  background:color-mix(in srgb,var(--good) 14%,#fff);color:#1f6b45;padding:4px 12px;border-radius:20px}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--good)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;
+  border-bottom:2px solid var(--brand);padding:7px 12px}
+th.n,td.n{text-align:right}
+td{padding:8px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.lead{font-weight:600;white-space:nowrap}
+tfoot td{border-top:1.5px solid var(--hairStrong);border-bottom:0;font-weight:700}
+.note{font-size:12.5px;color:var(--muted);margin-top:8px}
+ul.basis{margin:8px 0 0;padding:0;list-style:none}
+ul.basis li{padding:11px 0 11px 0;border-top:1px solid var(--hair);font-size:14px}
+ul.basis li:last-child{border-bottom:1px solid var(--hair)}
+ul.basis b{color:var(--ink)}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:1px 7px;border-radius:4px;margin-right:8px;vertical-align:1px}
+.tag.applied{background:color-mix(in srgb,var(--good) 14%,#fff);color:#1f6b45}
+.tag.excluded{background:color-mix(in srgb,var(--watch) 16%,#fff);color:#8a5a12}
+.signoff{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:14px}
+@media(max-width:620px){.signoff{grid-template-columns:1fr}}
+.sign{border-top:1px solid var(--hairStrong);padding-top:8px}
+.sign .role{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sign .line{height:34px;border-bottom:1px solid var(--hair);margin-top:6px}
+.sign small{font-size:11.5px;color:var(--muted)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--hair);color:var(--muted);font-size:12.5px}
+@media print{body{background:#fff}.doc{padding:0;max-width:none}h2{page-break-after:avoid}
+  table,ul.basis,.signoff{page-break-inside:avoid}@page{margin:16mm}}
+</style></head>
+<body><div class="doc">
+
+<h1>Budget Pack: Basis of Preparation and Audit Trail</h1>
+<p class="sub">Staff Costs and FTE Budget, current year and three-year plan.</p>
+<p class="meta">Source of truth: <b>Staff Costs & FTE Budget Model v2.4.xlsx</b><br>
+Prepared by <b>Donna Graham</b> &middot; generated <b>02 August 2026</b><br>
+The Excel workbook is the single source of truth. This document is the evidence that every figure in the pack traces back to it.</p>
+
+<h2>1. Assurance</h2>
+<p class="lead-in">Two automated controls stand between the workbook and every output. Neither is optional: the pipeline cannot produce a pack unless both pass, so the existence of this pack is itself evidence they did.</p>
+<p><span class="badge">Reconciliation passed</span> &nbsp; <span class="badge">Engine parity passed</span></p>
+<table><tbody>
+<tr><td class="lead">Reconciliation gate</td><td>The extract is tied back to the workbook's own summaries: FTE by cost centre and month, total FTE by month, total cost by budget year, and all 246 position-year component sums. Every check to the penny. Enforced as a hard gate.</td></tr>
+<tr><td class="lead">Engine parity</td><td>The interactive tools recompute cost from the workbook's driver values and reproduce all 20,664 monthly component cells exactly, so no output can silently disagree with the model.</td></tr>
+</tbody></table>
+
+<h2>2. Figures, and where they come from</h2>
+<p class="lead-in">Every figure below is the reconciled workbook total. Nothing here is a parallel calculation.</p>
+<table>
+<thead><tr><th>Current year 2025/26</th><th class="n">Amount</th><th>Basis</th></tr></thead>
+<tbody>
+<tr><td class="lead">Actuals to date</td><td class="n">£3,482,030</td><td>periods 1 to 9</td></tr>
+<tr><td class="lead">Forecast</td><td class="n">£1,007,107</td><td>periods 10 to 12</td></tr>
+<tr><td class="lead">Outturn</td><td class="n">£4,489,137</td><td>actuals + forecast</td></tr>
+<tr><td class="lead">Approved budget</td><td class="n">£4,679,896</td><td>76 positions</td></tr>
+<tr><td class="lead">Variance</td><td class="n">-£190,759</td><td>-4.1% underspend</td></tr>
+</tbody></table>
+<table style="margin-top:22px">
+<thead><tr><th>Budget years</th><th class="n">Total cost</th><th>Movement</th></tr></thead>
+<tbody>
+<tr><td class="lead">2026/27</td><td class="n">£4,870,487</td><td>outturn to budget</td></tr>
+<tr><td class="lead">2027/28</td><td class="n">£5,108,281</td><td>+4.9% on prior</td></tr>
+<tr><td class="lead">2028/29</td><td class="n">£5,343,928</td><td>+4.6% on prior</td></tr>
+</tbody>
+<tfoot><tr><td>Three-year total</td><td class="n">£15,322,696</td><td></td></tr></tfoot>
+</table>
+
+<h2>3. Assumptions applied</h2>
+<p class="lead-in">Read from the workbook's assumption set. Employer NI is charged on Basic, Bonus and Car Allowance above the secondary threshold of £417 per month; pension is excluded from the NI base, as it is not NICable.</p>
+<table>
+<thead><tr><th>Assumption</th><th class="n">2026/27</th><th class="n">2027/28</th><th class="n">2028/29</th></tr></thead>
+<tbody><tr><td class='lead'>Pay award (general uplift)</td><td class='n'>3.0%</td><td class='n'>3.0%</td><td class='n'>3.0%</td></tr><tr><td class='lead'>Employer NI rate</td><td class='n'>15.0%</td><td class='n'>16.0%</td><td class='n'>16.0%</td></tr><tr><td class='lead'>DC pension (employer)</td><td class='n'>8.0%</td><td class='n'>8.0%</td><td class='n'>8.0%</td></tr><tr><td class='lead'>DB pension (employer)</td><td class='n'>16.0%</td><td class='n'>16.0%</td><td class='n'>16.0%</td></tr><tr><td class='lead'>Bonus achievement</td><td class='n'>75.0%</td><td class='n'>75.0%</td><td class='n'>80.0%</td></tr></tbody>
+</table>
+
+<h2>4. Basis, inclusions and known limitations</h2>
+<p class="lead-in">What is applied, what is not, and why. Stated plainly so a reviewer's first question already has an answer.</p>
+<ul class="basis">
+<li><span class="tag applied">Applied</span><b>Employer NI, secondary threshold.</b> Category-A basis, charged above £417 per month per employee. The Employment Allowance is not modelled; it would be a single entity-level credit if added.</li>
+<li><span class="tag excluded">Not yet</span><b>SMP rebate.</b> Statutory maternity pay is carried gross. The HMRC rebate (about 92% for a small employer) is not yet modelled, so maternity cost is stated prudently high.</li>
+<li><span class="tag excluded">Not yet</span><b>Real Living Wage phasing.</b> The RLW floor is recorded and checked, but the mid-year phasing engine (the greater of the general award or the RLW floor, held in the workbook's basis column) is specified and not yet live. Forthcoming-year salary reflects the general award.</li>
+<li><span class="tag applied">Excluded by design</span><b>Candidate and scenario roles.</b> Held out of the committed baseline. They are decisions pending sign-off, not commitments, and appear only as impact in the decision views.</li>
+<li><span class="tag excluded">Not costed</span><b>Attrition and recruitment lag.</b> Rates and vacancy-gap assumptions exist in the workbook but are not yet costed into any budget year.</li>
+</ul>
+
+<h2>5. Controls and quality checks</h2>
+<p class="lead-in">The two gates above run on every build. The checks below are the standing controls on the workbook, designed to catch the errors that overstate cost without ever producing an error value.</p>
+<table>
+<thead><tr><th>Control</th><th>What it catches</th></tr></thead>
+<tbody><tr><td class='lead'>Reconciliation gate</td><td>Extract must tie to the workbook by FTE and by cost, to the penny, or the pipeline stops. A hard gate: no output is produced otherwise.</td></tr><tr><td class='lead'>Engine parity</td><td>The interactive tools recompute every position's monthly cost from the workbook's own driver values and must reproduce every cell exactly.</td></tr><tr><td class='lead'>Handover double-funding</td><td>Flags a blank start date on a row sharing a Position ID with a dated leaver (a role funded twice through a handover).</td></tr><tr><td class='lead'>Legacy DB on a new hire</td><td>Flags Pension Type DB on any position starting after the current year-end.</td></tr><tr><td class='lead'>Establishment integrity</td><td>Flags an approved-post count that does not equal the filled count, with no explaining comment (a vacancy or an over-establishment).</td></tr><tr><td class='lead'>Blended NI sanity</td><td>Checks blended employer NI as a share of NICable pay sits in a sane band (about 13.5% on the current basis).</td></tr><tr><td class='lead'>Living wage floor</td><td>Flags any living-wage-affected role whose forthcoming-year full-time salary falls below the Real Living Wage floor.</td></tr><tr><td class='lead'>Attribute integrity</td><td>Flags any establishment attribute (cost-centre, department, grade, group, function) resolving to blank or error.</td></tr></tbody>
+</table>
+
+<h2>6. Sign-off</h2>
+<p class="lead-in">This pack is prepared from the workbook named above. Signing confirms the figures have been reviewed against it.</p>
+<div class="signoff">
+<div class="sign"><div class="role">Prepared by</div><div class="line"></div><small>Donna Graham &middot; 02 August 2026</small></div>
+<div class="sign"><div class="role">Reviewed by</div><div class="line"></div><small>Name &middot; date</small></div>
+<div class="sign"><div class="role">Approved by</div><div class="line"></div><small>Name &middot; date</small></div>
+</div>
+
+<footer>Generated from the reconciled pipeline outputs of Staff Costs & FTE Budget Model v2.4.xlsx. Re-running the pipeline regenerates this document, so it can never drift from the numbers it certifies.</footer>
+
+</div></body></html>

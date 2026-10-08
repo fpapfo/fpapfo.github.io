@@ -42,3 +42,21 @@ img {
 /* Optional: brand blue for that footer link only */
 .site-footer a[href="https://www.linkedin.com/in/donna-graham-685521179"] { color: #0A66C2; }
 .feed-subscribe { display: none; }
+
+/* added 08-10-26 for the audio companion player, matching .toc-box */
+.audio-companion {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid #d8d8d8;
+  border-left: 4px solid #1f4e79; /* your navy */
+  border-radius: 4px;
+  background: #f8f9fa;
+}
+.audio-companion p {
+  margin-bottom: 0.75rem;
+  font-size: 0.95em;
+}
+.audio-companion audio {
+  display: block;
+  width: 100%;
+}

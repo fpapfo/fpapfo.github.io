@@ -21,6 +21,8 @@ In this article (10 minute read):
 - [What makes it auditable](#what-makes-it-auditable)
 - [Closing thoughts](#closing-thoughts)
 
+{% include audio.html src="/assets/audio/2026-07-15-finance-needs-workflows-not-prompts.m4a" duration="21 minutes" event="workflows" note="Prefer to listen? This is an AI-generated discussion of the article, produced with Google NotebookLM. Two synthetic hosts, in American English, talking about British maths. The written article remains the authoritative version." %}
+
 
 
 

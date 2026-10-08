@@ -1,0 +1,28 @@
+{%- comment -%}
+  Audio companion player. Parameters:
+    src      path to the file, e.g. /assets/audio/slug.m4a
+    duration human-readable length, e.g. "21 minutes"
+    event    short label for the GoatCounter event, e.g. "workflows"
+    note     the AI-generated disclosure shown above the player
+  preload="none" keeps the file off the wire until a reader presses play,
+  so the page stays light for the majority who only read.
+{%- endcomment -%}
+<div class="audio-companion">
+  <p><strong>Audio companion, {{ include.duration }}.</strong> {{ include.note }}</p>
+  <audio id="audio-{{ include.event }}" controls preload="none" src="{{ include.src | relative_url }}"></audio>
+  <script>
+    (function () {
+      var player = document.getElementById('audio-{{ include.event }}');
+      if (!player) { return; }
+      player.addEventListener('play', function () {
+        if (window.goatcounter && window.goatcounter.count) {
+          window.goatcounter.count({
+            path: 'audio-play: {{ include.event }}',
+            title: 'Audio companion play',
+            event: true
+          });
+        }
+      }, { once: true });
+    })();
+  </script>
+</div>

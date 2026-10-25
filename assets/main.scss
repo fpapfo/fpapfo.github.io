@@ -52,6 +52,12 @@ img {
   border-radius: 4px;
   background: #f8f9fa;
 }
+.audio-companion p.audio-companion__heading {
+  margin-bottom: 0.4rem;
+  font-size: 1.05em;
+  font-weight: 700;
+  color: #1f4e79; /* your navy, ties the hook to the left rule */
+}
 .audio-companion p {
   margin-bottom: 0.75rem;
   font-size: 0.95em;

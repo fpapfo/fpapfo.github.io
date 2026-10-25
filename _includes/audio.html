@@ -4,10 +4,12 @@
     duration human-readable length, e.g. "21 minutes"
     event    short label for the GoatCounter event, e.g. "workflows"
     note     the AI-generated disclosure shown above the player
+    heading  optional hook above it all, defaults to "Prefer to listen?"
   preload="none" keeps the file off the wire until a reader presses play,
   so the page stays light for the majority who only read.
 {%- endcomment -%}
 <div class="audio-companion">
+  <p class="audio-companion__heading">{{ include.heading | default: "Prefer to listen?" }}</p>
   <p><strong>Audio companion, {{ include.duration }}.</strong> {{ include.note }}</p>
   <audio id="audio-{{ include.event }}" controls preload="none" src="{{ include.src | relative_url }}"></audio>
   <script>

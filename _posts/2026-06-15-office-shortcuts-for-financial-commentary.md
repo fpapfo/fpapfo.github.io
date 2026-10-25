@@ -25,6 +25,7 @@ I use a full stop/dot prefix (`.`) to avoid accidental triggers mid-word. Here i
 | `.delta` | Δ | Variance symbol in commentary |
 | `.var` | Δ | Same, for when I blank on the longer one |
 | `.sum` | Σ | Summation |
+| `.div` | ÷ | Division, in rates and per unit workings |
 | `.increase` | ▲ | Upward movement |
 | `.inc` | ▲ | Shorthand version |
 | `.decrease` | ▼ | Downward movement |
@@ -72,7 +73,9 @@ The symbols are not decoration. Used consistently, they become a visual language
 
 You will need to add these one at a time in the AutoCorrect dialog as unfortunately there is no bulk import option. I'd suggest doing it in Word or Outlook where you can test immediately by typing in a document. The changes will sync to the rest of the suite automatically over a few minutes.
 
-One caveat: AutoCorrect entries are stored locally, so moving to a new machine means starting again. I keep a reference copy in my notes for exactly this reason. The setup takes five minutes, but only if you can remember what you had.
+One caveat: AutoCorrect entries are stored locally, so a new machine starts with an empty list. I keep a reference copy in my notes for exactly this reason. The setup takes five minutes, but only if you can remember what you had.
+
+**Update, October 2026:** moving to a new machine does not mean starting again after all. These entries live in files named `MSOxxxx.acl` in `C:\Users\YourName\AppData\Roaming\Microsoft\Office`, and they copy across like any other file. Copy all of them rather than picking one, since the number is a language code. Close Office on the machine you are pasting onto, or it will write its own list back over what you have just copied in. The full method is in [Moving your AutoCorrect shortcuts to a new computer](/2026/10/25/moving-office-autocorrect-to-a-new-computer.html).
 
 
 *Small habits, compounded over time, are where a lot of the real efficiency in this job lives.*

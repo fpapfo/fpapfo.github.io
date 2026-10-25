@@ -56,4 +56,4 @@ Symbols like Δ and ▲ are plain text, so the `.acl` copy brings them. If you h
 
 Copying the file is faster, but it only helps while you still have the old machine. A laptop that dies, or a rebuild done at short notice, leaves you nothing to copy from. A plain list of your triggers in your notes costs nothing and covers the case the file copy cannot.
 
-*The file was there the whole time, in a hidden folder, under a four digit number. Which is a fair explanation for why nobody finds it by accident.*
+*The file was there the whole time, in a hidden folder, under a four digit number. You're unlikely to find that by accident unless you're poking around in AppData to see what else might be there.*
